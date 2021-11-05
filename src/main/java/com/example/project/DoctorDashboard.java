@@ -12,6 +12,11 @@ public class DoctorDashboard extends Dashboard {
         appointments = new ArrayList<Appointment>();
         messages = new ArrayList<Message>();
     }
+    public DoctorDashboard(VisitSummary summary, ArrayList<Appointment> appointments, ArrayList<Message> messages) {
+        visitSummary = summary;
+        this.appointments = appointments;
+        this.messages = messages;
+    }
     public VisitSummary getVisitSummary() {
         return visitSummary;
     }

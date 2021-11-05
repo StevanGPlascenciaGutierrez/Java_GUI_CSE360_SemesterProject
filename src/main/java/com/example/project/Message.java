@@ -12,6 +12,12 @@ public class Message {
         receiver = "";
         timeStamp = "";
     }
+    public Message(String content, String sender, String receiver, String timeStamp) {
+        this.content = content;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.timeStamp = timeStamp;
+    }
     public String getContent() {
         return content;
     }
