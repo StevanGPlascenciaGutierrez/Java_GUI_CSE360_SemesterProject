@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.Controller">
+   <bottom>
+      <VBox alignment="CENTER" prefHeight="134.0" prefWidth="1280.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="81.0" prefWidth="1280.0" spacing="50.0">
+               <children>
+                  <TextField prefHeight="30.0" prefWidth="302.0" />
+                  <Hyperlink alignment="CENTER" prefHeight="28.0" prefWidth="124.0" style="-fx-border-color: black; -fx-border-radius: 10;" text="Send Message" textAlignment="CENTER" underline="true" wrapText="true" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
+   <center>
+      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+   <top>
+      <BorderPane prefHeight="59.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+         <center>
+            <Label alignment="CENTER" prefHeight="34.0" prefWidth="277.0" text="Doctor/Nurse Messaging Board" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </center>
+         <right>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Hyperlink fx:id="backPatDash" alignment="CENTER" onAction="#PatDashClick" prefHeight="29.0" prefWidth="63.0" text="Back" textAlignment="CENTER">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Hyperlink>
+               </children>
+            </HBox>
+         </right>
+         <left>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </left>
+      </BorderPane>
+   </top>
+</BorderPane>
