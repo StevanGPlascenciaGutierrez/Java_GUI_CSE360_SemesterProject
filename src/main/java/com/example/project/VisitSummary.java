@@ -14,6 +14,12 @@ public class VisitSummary {
         doctorNote = "";
         healthIssues = new ArrayList<HealthIssue>();
     }
+    public VisitSummary(String date, Vitals vitals, String doctorNote, ArrayList<HealthIssue> healthIssues) {
+        this.date = date;
+        this.vitals = vitals;
+        this.doctorNote = doctorNote;
+        this.healthIssues = healthIssues;
+    }
     public String getDate() {
         return date;
     }

@@ -12,6 +12,11 @@ public class PatientDashboard extends Dashboard {
         pharmacy = null;
         immunizations = new ArrayList<Immunization>();
     }
+    public PatientDashboard(Insurance insurance, Pharmacy pharmacy, ArrayList<Immunization> immunizations) {
+        this.insurance = insurance;
+        this.pharmacy = pharmacy;
+        this.immunizations = immunizations;
+    }
     public Insurance getInsurance() {
         return insurance;
     }
