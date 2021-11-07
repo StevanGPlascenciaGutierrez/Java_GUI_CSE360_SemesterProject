@@ -11,9 +11,8 @@ public class Project extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Project.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(),  1920, 1080);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
-        stage.setFullScreen(true);
         stage.show();
     }
 

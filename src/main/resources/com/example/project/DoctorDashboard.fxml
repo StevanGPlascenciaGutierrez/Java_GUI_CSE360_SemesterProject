@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="623.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.Controller">
    <top>
       <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-spacing: 400; -fx-alignment: center; -fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
          <items>
@@ -30,7 +32,7 @@
             <VBox alignment="CENTER" prefHeight="416.0" prefWidth="100.0" spacing="70.0">
                <children>
                   <Button fx:id="docPatients" mnemonicParsing="false" onAction="#onDocPatientClick" prefHeight="60.0" prefWidth="100.0" style="-fx-cursor: hand;" text="Patient Search" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="docPatients1" mnemonicParsing="false" onAction="#onDocPatientClick" prefHeight="60.0" prefWidth="100.0" style="-fx-cursor: hand;" text="Patient Visit Summaries" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="docVisit" mnemonicParsing="false" onAction="#onDocVisitClick" prefHeight="60.0" prefWidth="100.0" style="-fx-cursor: hand;" text="Patient Visit Summaries" textAlignment="CENTER" wrapText="true" />
                   <BorderPane prefHeight="64.0" prefWidth="82.0">
                      <center>
                         <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#onLogout" prefHeight="32.0" prefWidth="54.0" style="-fx-cursor: hand;" text="Logout" BorderPane.alignment="CENTER" />
@@ -82,6 +84,18 @@
                      <center>
                         <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" BorderPane.alignment="CENTER" />
                      </center>
+                     <bottom>
+                        <HBox alignment="CENTER" prefHeight="67.0" prefWidth="571.0" style="-fx-border-color: black; -fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="67.0" prefWidth="402.0" spacing="30.0">
+                                 <children>
+                                    <TextField prefHeight="26.0" prefWidth="224.0" />
+                                    <Hyperlink alignment="CENTER" style="-fx-border-color: black; -fx-border-radius: 7;" text="Send Message" textAlignment="CENTER" underline="true" wrapText="true" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                     </bottom>
                   </BorderPane>
                </children>
             </HBox>

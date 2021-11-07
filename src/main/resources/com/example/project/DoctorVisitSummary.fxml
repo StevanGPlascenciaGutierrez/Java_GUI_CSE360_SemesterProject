@@ -32,7 +32,7 @@
                   <Label text="Patient" />
                </children>
             </HBox>
-            <Hyperlink fx:id="backPatDash" onAction="#PatDashClick" text="Back" textAlignment="CENTER" underline="true" wrapText="true">
+            <Hyperlink fx:id="backDocDash" onAction="#onDocDashClick" text="Back" textAlignment="CENTER" underline="true" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>
