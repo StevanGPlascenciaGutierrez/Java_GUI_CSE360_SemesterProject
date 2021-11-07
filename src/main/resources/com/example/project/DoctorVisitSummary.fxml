@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -17,7 +18,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.Controller">
    <top>
-      <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-spacing: 400; -fx-alignment: center; -fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+      <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-spacing: 100; -fx-alignment: center; -fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
          <items>
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="275.0" spacing="10.0" style="-fx-border-color: black;">
                <children>
@@ -25,11 +26,12 @@
                   <Label text="Visit Summary" />
                </children>
             </HBox>
-            <TextFlow prefHeight="32.0" prefWidth="142.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="275.0" spacing="10.0" style="-fx-border-color: black;">
                <children>
-                  <Label alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Doctor" textAlignment="CENTER" translateY="1.0" wrapText="true" />
+                  <ComboBox prefWidth="150.0" />
+                  <Label text="Patient" />
                </children>
-            </TextFlow>
+            </HBox>
             <Hyperlink fx:id="backPatDash" onAction="#PatDashClick" text="Back" textAlignment="CENTER" underline="true" wrapText="true">
                <font>
                   <Font size="14.0" />
