@@ -11,64 +11,32 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.Controller">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" style="-fx-background-image: url(&quot;https://badcoffee.club/wp-content/uploads/2021/04/macOS-Big-Sur-Login-Screen-Background-Image.png&quot;); -fx-background-size: 100% 100%;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.Controller">
    <center>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="565.0" prefWidth="590.0" BorderPane.alignment="CENTER">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="565.0" prefWidth="590.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
-            <VBox layoutX="93.0" layoutY="140.0" prefHeight="353.0" prefWidth="90.0" spacing="20.0">
-               <children>
-                  <TextFlow prefHeight="54.0" prefWidth="90.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
-                     <children>
-                        <Label alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Enter First Name" textAlignment="CENTER" translateY="7.0" wrapText="true" />
-                     </children>
-                  </TextFlow>
-                  <TextFlow prefHeight="54.0" prefWidth="90.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
-                     <children>
-                        <Label alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Enter Last Name" textAlignment="CENTER" translateY="7.0" wrapText="true" />
-                     </children>
-                  </TextFlow>
-                  <TextFlow prefHeight="54.0" prefWidth="90.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
-                     <children>
-                        <Label alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Enter Birthday" textAlignment="CENTER" translateY="7.0" wrapText="true" />
-                     </children>
-                  </TextFlow>
-                  <TextFlow prefHeight="54.0" prefWidth="90.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
-                     <children>
-                        <Label alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Enter Email" textAlignment="CENTER" translateY="7.0" />
-                     </children>
-                  </TextFlow>
-                  <TextFlow prefHeight="54.0" prefWidth="90.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
-                     <children>
-                        <Label alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Enter Password" textAlignment="CENTER" translateY="7.0" wrapText="true" />
-                     </children>
-                  </TextFlow>
-               </children>
-            </VBox>
-            <TextFlow layoutX="169.0" layoutY="14.0" prefHeight="110.0" prefWidth="251.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
-               <children>
-                  <Label alignment="CENTER" prefHeight="65.0" prefWidth="166.0" text="Patient Sign Up" translateY="19.0">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-               </children>
-            </TextFlow>
             <Hyperlink fx:id="backLogin" layoutX="450.0" layoutY="23.0" onAction="#onBackLogin" text="Back to Patient Login" underline="true" />
-            <VBox layoutX="235.0" layoutY="159.0" prefHeight="309.0" prefWidth="132.0" spacing="45.0">
+            <VBox layoutX="190.0" layoutY="151.0" prefHeight="342.0" prefWidth="222.0" spacing="40.0">
                <children>
-                  <TextField style="-fx-border-color: black;" />
-                  <TextField style="-fx-border-color: black; -fx-border-color: ;" />
-                  <DatePicker />
-                  <TextField style="-fx-border-color: black; -fx-border-color: ;" />
-                  <PasswordField />
+                  <TextField fx:id="signUpFirst" prefHeight="34.0" prefWidth="222.0" promptText="First Name" />
+                  <TextField fx:id="signUpLast" prefHeight="34.0" prefWidth="222.0" promptText="Last Name" />
+                  <DatePicker fx:id="signUpBday" prefHeight="35.0" prefWidth="222.0" promptText="Birthday" />
+                  <TextField fx:id="signUpEmail" prefHeight="34.0" prefWidth="222.0" promptText="Email" />
+                  <PasswordField fx:id="signUpPassword" prefHeight="32.0" prefWidth="222.0" promptText="Password" />
                </children>
             </VBox>
-            <Button alignment="CENTER" layoutX="260.0" layoutY="494.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="81.0" style="-fx-background-radius: 10;" text="Sign Up" textAlignment="CENTER" wrapText="true">
+            <Button fx:id="patientSignUp" alignment="CENTER" layoutX="260.0" layoutY="504.0" mnemonicParsing="false" onAction="#onPatientSignUp" prefHeight="47.0" prefWidth="81.0" style="-fx-background-radius: 10;" text="Sign Up" textAlignment="CENTER" wrapText="true">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
+            <Label alignment="CENTER" layoutX="218.0" layoutY="23.0" prefHeight="65.0" prefWidth="166.0" text="Patient Sign Up">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <Label fx:id="signUpLabel" alignment="CENTER" layoutX="245.0" layoutY="104.0" prefHeight="18.0" prefWidth="111.0" textAlignment="CENTER" textFill="RED" />
+            <Label fx:id="signUpLabel" alignment="CENTER" layoutX="169.0" layoutY="80.0" prefHeight="48.0" prefWidth="264.0" textFill="RED" wrapText="true" />
          </children>
       </AnchorPane>
    </center>

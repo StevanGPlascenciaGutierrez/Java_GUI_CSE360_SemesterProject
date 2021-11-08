@@ -4,20 +4,48 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 public class Controller {
     @FXML
     private Hyperlink signUp, backLogin, doctorLogin, backPatDash, backDocDash;
     @FXML
-    private Button loginButton, logoutButton, toMessages, appButt, visitSumButt, patHealthHistClick, prescriptionClick, staffLogin, docPatients, docVisit;
+    private Button deletePatient, patientSignUp, loginButton, logoutButton, toMessages, appButt, visitSumButt, patHealthHistClick, prescriptionClick, staffLogin, docPatients, docVisit;
+
+    @FXML
+    private TextField patientEmail, staffID, signUpFirst, signUpLast, signUpEmail;
+
+    @FXML
+    private PasswordField patientPassword, staffPassword, signUpPassword;
+
+    @FXML
+    private Label signInLabel, staffSignInLabel, signUpLabel;
+
+    @FXML
+    private DatePicker signUpBday;
 
     private Parent root;
     private Scene scene;
     private Stage window;
 
+
+    @FXML
+    protected void deletePatientData() throws Exception {
+        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        deleteAlert.setTitle("Warning");
+        deleteAlert.setHeaderText("You are about to delete this patient from the system");
+        deleteAlert.setContentText("Are you sure you want to delete this patient?");
+
+        if (deleteAlert.showAndWait().get() == ButtonType.OK) {
+
+            root = FXMLLoader.load(Project.class.getResource("DoctorDashboard.fxml"));
+            window = (Stage) backDocDash.getScene().getWindow();
+            scene = new Scene(root);
+            window.setScene(scene);
+            window.show();
+        }
+    }
 
     @FXML
     protected void onDocDashClick() throws Exception {
@@ -48,11 +76,16 @@ public class Controller {
 
     @FXML
     protected void onStaffLogin() throws Exception{
-        root = FXMLLoader.load(Project.class.getResource("DoctorDashboard.fxml"));
-        window = (Stage) staffLogin.getScene().getWindow();
-        scene = new Scene(root);
-        window.setScene(scene);
-        window.show();
+        if (staffID.getText().isBlank() || staffPassword.getText().isBlank()) {
+            staffSignInLabel.setText("Please enter an email and password");
+        }
+        else {
+            root = FXMLLoader.load(Project.class.getResource("DoctorDashboard.fxml"));
+            window = (Stage) staffLogin.getScene().getWindow();
+            scene = new Scene(root);
+            window.setScene(scene);
+            window.show();
+        }
     }
 
 
@@ -113,11 +146,18 @@ public class Controller {
 
     @FXML
     protected void onLogout() throws Exception{
-        Parent root = FXMLLoader.load(Project.class.getResource("login.fxml"));
-        Stage window = (Stage) logoutButton.getScene().getWindow();
-        scene = new Scene(root);
-        window.setScene(scene);
-        window.show();
+        Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        logoutAlert.setTitle("Logout");
+        logoutAlert.setHeaderText("You're about to log out");
+        logoutAlert.setContentText("Are you sure you want to log out");
+
+        if (logoutAlert.showAndWait().get() == ButtonType.OK) {
+            Parent root = FXMLLoader.load(Project.class.getResource("login.fxml"));
+            Stage window = (Stage) logoutButton.getScene().getWindow();
+            scene = new Scene(root);
+            window.setScene(scene);
+            window.show();
+        }
     }
 
     @FXML
@@ -147,11 +187,37 @@ public class Controller {
     }
 
     @FXML
+    protected void onPatientSignUp() throws Exception {
+        try {
+            if (signUpFirst.getText().isBlank() || signUpLast.getText().isBlank() || signUpEmail.getText().isBlank() || signUpPassword.getText().isBlank() || signUpBday.getValue().toString().isBlank()) {
+                signUpLabel.setText("Please enter valid entries for each field");
+            }
+            else {
+                Parent root = FXMLLoader.load(Project.class.getResource("login.fxml"));
+                Stage window = (Stage) patientSignUp.getScene().getWindow();
+                scene = new Scene(root);
+                window.setScene(scene);
+                window.show();
+            }
+        }
+        catch (NullPointerException e){
+            signUpLabel.setText("Please enter a valid birthday");
+        }
+
+    }
+
+    @FXML
     protected void onLogin() throws Exception {
-        Parent root = FXMLLoader.load(Project.class.getResource("Patient Dashboard.fxml"));
-        Stage window = (Stage) loginButton.getScene().getWindow();
-        scene = new Scene(root);
-        window.setScene(scene);
-        window.show();
+        if (patientEmail.getText().isBlank() || patientPassword.getText().isBlank()) {
+            signInLabel.setText("Please enter an email and password");
+        }
+        else {
+            Parent root = FXMLLoader.load(Project.class.getResource("Patient Dashboard.fxml"));
+            Stage window = (Stage) loginButton.getScene().getWindow();
+            scene = new Scene(root);
+            window.setScene(scene);
+            window.show();
+        }
+
     }
 }
