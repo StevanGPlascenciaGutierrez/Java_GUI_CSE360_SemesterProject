@@ -47,4 +47,6 @@ public class LoggedController implements Initializable{
     private Connection conn = null;
     private PreparedStatement pst =  null;
 
+
+
 }
