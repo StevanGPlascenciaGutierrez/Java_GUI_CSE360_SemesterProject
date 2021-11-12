@@ -12,12 +12,13 @@ import java.util.Locale;
 
 public class Connect {
     static final String url = "jdbc:sqlite:db/CSE360PROJECT.db";
-    Connection conn = null;
+    static Connection conn = null;
 
     public static Connection Connect(){//Sets connection to database
         try{
             Connection conn = DriverManager.getConnection(url);
             System.out.println("Connection Established");
+            Connect.conn = conn;
             return conn;
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -28,7 +29,7 @@ public class Connect {
     public int loginPatient(String user, String pass) {
         String sql = "SELECT email, password, patientID FROM Patient WHERE email = ?";
 
-        try (Connection conn = Connect()) {
+        try (Connection conn = Connect.conn) {
             user = user.toLowerCase();
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1,user);
@@ -36,8 +37,8 @@ public class Connect {
             String email = rs.getString("email");
             String password = rs.getString("password");
             int patientID = rs.getInt("patientID");
-            if(user == email){
-                if(pass == password){
+            if(user.equals(email)){
+                if(pass.equals(password)){
                     return patientID;
                 }
             }
@@ -50,14 +51,14 @@ public class Connect {
     public int loginStaff(int id, String pass){
         String sql = "SELECT doctorID, password FROM Patient WHERE doctorID = ?";
 
-        try (Connection conn = Connect()) {
+        try (Connection conn = Connect.conn) {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1,id);
             ResultSet rs = stmt.executeQuery(sql);
             int doctorID = rs.getInt("doctorID");
             String password = rs.getString("password");
             if(id == doctorID){
-                if(pass == password){
+                if(pass.equals(password)){
                     return doctorID;
                 }
             }
@@ -68,7 +69,7 @@ public class Connect {
     }
 
     public boolean signUp(String fName, String lName, String bDay, String email, String pass){
-        try(Connection conn = Connect()){
+        try(Connection conn = Connect.conn){
             String sql = "INSERT INTO Patient(name, birthday, emailAddress, password) VALUES (?,?,?,?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1,fName+lName);
@@ -85,7 +86,7 @@ public class Connect {
         try {
             conn.close();
         }catch(SQLException e){
-            return;
+            System.out.println("Close failed");
         }
     }
 }
