@@ -12,7 +12,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.Controller">
    <top>
-      <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-spacing: 400; -fx-alignment: center;" BorderPane.alignment="CENTER">
+      <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-spacing: 400; -fx-alignment: center; -fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
          <items>
             <TextFlow prefHeight="42.0" prefWidth="448.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
                <children>
@@ -30,7 +30,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="637.0" prefWidth="1280.0">
                      <children>
-                        <ListView editable="true" layoutX="423.0" layoutY="170.0" prefHeight="358.0" prefWidth="482.0" style="-fx-border-color: black;" />
+                        <ListView editable="true" layoutX="270.0" layoutY="138.0" prefHeight="425.0" prefWidth="733.0" style="-fx-border-color: black;" />
                      </children>
                   </AnchorPane>
             </content>
@@ -39,7 +39,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView editable="true" layoutX="448.0" layoutY="160.0" prefHeight="358.0" prefWidth="482.0" style="-fx-border-color: black;" />
+                        <ListView editable="true" layoutX="342.0" layoutY="149.0" prefHeight="425.0" prefWidth="733.0" style="-fx-border-color: black;" />
                      </children>
                   </AnchorPane>
             </content>

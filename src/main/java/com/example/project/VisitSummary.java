@@ -6,15 +6,15 @@ public class VisitSummary {
     private String date;
     private Vitals vitals;
     private String doctorNote;
-    private ArrayList<HealthIssue> healthIssues;
+    private ArrayList<HealthIssues> healthIssues;
 
     public VisitSummary() {
         date = "";
         vitals = null;
         doctorNote = "";
-        healthIssues = new ArrayList<HealthIssue>();
+        healthIssues = new ArrayList<HealthIssues>();
     }
-    public VisitSummary(String date, Vitals vitals, String doctorNote, ArrayList<HealthIssue> healthIssues) {
+    public VisitSummary(String date, Vitals vitals, String doctorNote, ArrayList<HealthIssues> healthIssues) {
         this.date = date;
         this.vitals = vitals;
         this.doctorNote = doctorNote;
@@ -29,13 +29,13 @@ public class VisitSummary {
     public Vitals getVitals() {
         return vitals;
     }
-    public ArrayList<HealthIssue> getHealthIssues() {
+    public ArrayList<HealthIssues> getHealthIssues() {
         return healthIssues;
     }
     public void setDate(String newDate) {
         date = newDate;
     }
-    public void setHealthIssues(ArrayList<HealthIssue> newIssues) {
+    public void setHealthIssues(ArrayList<HealthIssues> newIssues) {
         healthIssues = newIssues;
     }
     public void setDoctorNote(String newNote) {
