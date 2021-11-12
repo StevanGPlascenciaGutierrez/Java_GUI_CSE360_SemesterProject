@@ -6,20 +6,20 @@ public class Nurse {
     private String name;
     private int staffID;
     private String password;
-    private ArrayList<Doctor> doctors;
+    private Doctor doctor;
 
 
     public Nurse() {
         this.name = null;
         this.staffID = 0;
         this.password = null;
-        doctors = new ArrayList<Doctor>();
+        doctor = null;
     }
-    public Nurse(String name, int staffID, String password) {
+    public Nurse(String name, int staffID, String password, Doctor doctor) {
         this.name = name;
         this.staffID = staffID;
         this.password = password;
-        doctors = new ArrayList<Doctor>();
+        this.doctor = doctor;
     }
 
     public String getName() {
@@ -35,9 +35,9 @@ public class Nurse {
         return password;
     }
 
-    public ArrayList<Doctor> getDoctors()
+    public Doctor getDoctors()
     {
-        return doctors;
+        return doctor;
     }
 
     public void setName(String name)
@@ -55,8 +55,4 @@ public class Nurse {
         this.password = password;
     }
 
-    public void addDoctor(Doctor doctor)
-    {
-        doctors.add(doctor);
-    }
 }
