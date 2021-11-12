@@ -19,6 +19,8 @@ public class Project extends Application {
     }
 
     public static void main(String[] args) {
+        Connect.Connect();
+
         launch();
     }
 }
