@@ -8,7 +8,7 @@ public class PatientDashboard extends Dashboard {
     private ArrayList<Immunization> immunizations;
 
     public PatientDashboard() {
-        insurace = null;
+        insurance = null;
         pharmacy = null;
         immunizations = new ArrayList<Immunization>();
     }
