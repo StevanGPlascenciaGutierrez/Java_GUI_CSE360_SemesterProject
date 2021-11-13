@@ -18,12 +18,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LogInController implements Initializable {
+public class LogInController {
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        conn = Connect.Connect();
-    }
 
     @FXML
     private Hyperlink signUp, backLogin, doctorLogin, backPatDash, backDocDash;
@@ -46,8 +42,6 @@ public class LogInController implements Initializable {
     private Scene scene;
     private Stage window;
 
-    private Connection conn = null;
-    private PreparedStatement pst =  null;
 
     @FXML
     public void loadFX(Button butt, String file) throws Exception {
@@ -206,33 +200,14 @@ public class LogInController implements Initializable {
                 signUpLabel.setText("Please enter valid entries for each field");
             }
             else {
-                String sql = "INSERT INTO Patient(name, emailAddress, birthday, address, phoneNumber, password) VALUES(?, ?, ?, ?, ?, ?)";
 
-
-                String name = signUpFirst.getText() + " " + signUpLast.getText();
                 String email = signUpEmail.getText();
                 String password = signUpPassword.getText();
                 String bday = signUpBday.getValue().toString();
                 String address = signUpAddress.getText();
                 long phone = Long.parseLong(signUpPhone.getText());
 
-
-                try {
-                    pst = conn.prepareStatement(sql);
-                    pst.setString(1, name);
-                    pst.setString(2, email);
-                    pst.setString(3, bday);
-                    pst.setString(4, address);
-                    pst.setLong(5, phone);
-                    pst.setString(6, password);
-                }
-                catch (SQLException e) {
-                    Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, null, e);
-                }
-
-                int i = pst.executeUpdate();
-
-                if (i == 1) System.out.println("success");
+                Connect.signUp(signUpFirst.getText(), signUpLast.getText(), email, password, bday, address, phone);
 
                 loadFX(patientSignUp, "login.fxml");
 
@@ -250,6 +225,7 @@ public class LogInController implements Initializable {
             signInLabel.setText("Please enter an email and password");
         }
         else {
+            System.out.println(Connect.loginPatient(patientEmail.getText(), patientPassword.getText()));
             loadFX(loginButton, "Patient Dashboard.fxml");
         }
 

@@ -11,14 +11,22 @@ import java.util.Locale;
 
 
 public class Connect {
-    static final String url = "jdbc:sqlite:db/CSE360PROJECT.db";
-    static Connection conn = null;
+    public static final String url = "jdbc:sqlite:db/CSE360PROJECT.db";
+    static Connection conn;
+
+    static {
+        try {
+            conn = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static Connection Connect(){//Sets connection to database
         try{
-            Connection conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(url);
             System.out.println("Connection Established");
-            Connect.conn = conn;
             return conn;
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -26,24 +34,23 @@ public class Connect {
         return null;
     }
 
-    public int loginPatient(String user, String pass) {
-        String sql = "SELECT email, password, patientID FROM Patient WHERE email = ?";
+    public static int loginPatient(String user, String pass) {
+        String sql = "SELECT emailAddress, password, patientID FROM Patient WHERE emailAddress = ?";
 
-        try (Connection conn = Connect.conn) {
-            user = user.toLowerCase();
+        try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1,user);
-            ResultSet rs = stmt.executeQuery(sql);
-            String email = rs.getString("email");
+            ResultSet rs = stmt.executeQuery();
+            String email = rs.getString("emailAddress");
             String password = rs.getString("password");
             int patientID = rs.getInt("patientID");
-            if(user.equals(email)){
-                if(pass.equals(password)){
-                    return patientID;
-                }
+
+            if(user.equals(email) && pass.equals(password)){
+                return patientID;
             }
             return -1;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             return -1;
         }
     }
@@ -51,10 +58,10 @@ public class Connect {
     public int loginStaff(int id, String pass){
         String sql = "SELECT doctorID, password FROM Patient WHERE doctorID = ?";
 
-        try (Connection conn = Connect.conn) {
+        try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1,id);
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery();
             int doctorID = rs.getInt("doctorID");
             String password = rs.getString("password");
             if(id == doctorID){
@@ -68,14 +75,17 @@ public class Connect {
         }
     }
 
-    public boolean signUp(String fName, String lName, String bDay, String email, String pass){
-        try(Connection conn = Connect.conn){
-            String sql = "INSERT INTO Patient(name, birthday, emailAddress, password) VALUES (?,?,?,?)";
+    public static boolean signUp(String fName, String lName, String bDay, String email, String pass, String address, Long phone){
+        try {
+            String sql = "INSERT INTO Patient(name, birthday, emailAddress, password, address, phone) VALUES (?,?,?,?,?,?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1,fName+lName);
             stmt.setString(2, bDay);
             stmt.setString(3,email);
             stmt.setString(4,pass);
+            stmt.setString(5,address);
+            stmt.setLong(6,phone);
+            stmt.executeUpdate();
             return true;
         }catch(SQLException e){
           return false;
@@ -86,7 +96,7 @@ public class Connect {
         try {
             conn.close();
         }catch(SQLException e){
-            System.out.println("Close failed");
+            return;
         }
     }
 }
