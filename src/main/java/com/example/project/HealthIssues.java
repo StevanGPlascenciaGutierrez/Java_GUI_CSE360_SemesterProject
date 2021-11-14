@@ -1,30 +1,43 @@
 package com.example.project;
 
 public class HealthIssues {
-    private String issue;
+    private String name;
     private String description;
+    private String date;
 
     public HealthIssues() {
+        name = null;
+        description =null;
+        date =null;
     }
 
-    public HealthIssues(String issue, String description){
-        this.issue = issue;
+    public HealthIssues(String name, String description, String date) {
+        this.name = name;
         this.description = description;
+        this.date = date;
     }
 
-    public String getIssue() {
-        return issue;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setIssue(String issue) {
-        this.issue = issue;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setDescription(String newDescription){
-        this.description = newDescription;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
