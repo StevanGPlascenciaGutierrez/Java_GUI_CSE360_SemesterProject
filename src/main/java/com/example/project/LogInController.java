@@ -9,6 +9,10 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 
 public class LogInController {
 
@@ -53,6 +57,25 @@ public class LogInController {
         window.show();
     }
 
+    public void logIn (Button butt,String file, int id, PatientDashboard pat) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource(file));
+        Parent root = loader.load();
+
+        LoggedController cont = loader.getController();
+
+        cont.setID(id);
+        cont.setDoctorID(Connect.getPatientDoctor(id));
+        cont.setName(id);
+        cont.setDash(pat);
+
+
+        Stage window = (Stage) butt.getScene().getWindow();
+        window.setUserData(new Patient());
+        Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
+    }
 
     @FXML
     protected void onStaffLogin() throws Exception{
@@ -125,7 +148,9 @@ public class LogInController {
                 signInLabel.setText("username or password is incorrect");
             }
             else {
-                Connect.changeScene(loginButton, "Patient Dashboard.fxml", m);
+                PatientDashboard pat = PatientDashboard.select(m);
+
+                logIn(loginButton, "Patient Dashboard.fxml", m, pat);
             }
         }
 

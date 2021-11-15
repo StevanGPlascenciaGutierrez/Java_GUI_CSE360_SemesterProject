@@ -26,7 +26,7 @@
             </TextFlow>
             <TextFlow prefHeight="32.0" prefWidth="142.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
                <children>
-                  <Label alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Most Recent Doctor" textAlignment="CENTER" translateY="1.0" wrapText="true" />
+                  <Label fx:id="patDoctor" alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Most Recent Doctor" textAlignment="CENTER" translateY="1.0" wrapText="true" />
                </children>
             </TextFlow>
          </items>
@@ -82,11 +82,11 @@
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Name" textAlignment="CENTER" wrapText="true" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Address" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Email" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
-                              <Label text="Label" GridPane.columnIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="patName" text="Label" GridPane.columnIndex="1" />
+                              <Label fx:id="patAddress" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="patEmail" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Phone Number" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="patPhone" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
                         <Button fx:id="editPatientInfo" mnemonicParsing="false" onAction="#onEditPatient" text="Edit Info" textAlignment="CENTER" wrapText="true">
@@ -114,11 +114,11 @@
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Insurance Name" textAlignment="CENTER" wrapText="true" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Member ID" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Address" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
-                              <Label text="Label" GridPane.columnIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="insName" text="Label" GridPane.columnIndex="1" />
+                              <Label fx:id="insID" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="insAddress" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Phone Number" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="insPhone" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
                         <Button fx:id="editInsurance" mnemonicParsing="false" onAction="#onEditInsurance" text="Edit Info" textAlignment="CENTER" wrapText="true">
@@ -145,9 +145,9 @@
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Name" textAlignment="CENTER" wrapText="true" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Address" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Phone Number" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
-                              <Label text="Label" GridPane.columnIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="pharmName" text="Label" GridPane.columnIndex="1" />
+                              <Label fx:id="pharmAddress" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="pharmPhone" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                         <Button fx:id="prescriptionClick" mnemonicParsing="false" onAction="#onPreClick" text="Prescription History" textAlignment="CENTER" wrapText="true">
@@ -163,7 +163,7 @@
                <children>
                   <BorderPane prefHeight="407.0" prefWidth="764.0" style="-fx-border-color: black;">
                      <top>
-                        <ToolBar prefHeight="27.0" prefWidth="755.0" style="-fx-spacing: 400; -fx-alignment: center;" BorderPane.alignment="CENTER">
+                        <ToolBar fx:id="patImmune" prefHeight="27.0" prefWidth="755.0" style="-fx-spacing: 400; -fx-alignment: center;" BorderPane.alignment="CENTER">
                            <items>
                               <Label alignment="CENTER" prefHeight="19.0" prefWidth="159.0" style="-fx-border-color: black;" text="Immunization History" textAlignment="CENTER" />
                            </items>
@@ -172,9 +172,9 @@
                      <center>
                         <TableView prefHeight="300.0" prefWidth="562.0" BorderPane.alignment="CENTER">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Vaccine" />
-                              <TableColumn prefWidth="75.0" text="From" />
-                            <TableColumn prefWidth="75.0" text="To" />
+                            <TableColumn fx:id="patVaccine" prefWidth="75.0" text="Vaccine" />
+                              <TableColumn fx:id="patVaccDate" prefWidth="75.0" text="Date" />
+                              <TableColumn fx:id="patDescription" prefWidth="75.0" text="Description" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

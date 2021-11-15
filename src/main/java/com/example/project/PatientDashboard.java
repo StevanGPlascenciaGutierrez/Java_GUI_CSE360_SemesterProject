@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.example.project.Connect.conn;
+
 public class PatientDashboard extends Dashboard {
-    private Insurance insurance;
-    private Pharmacy pharmacy;
-    private ArrayList<Immunization> immunizations;
+    private static Insurance insurance;
+    private static Pharmacy pharmacy;
+    private static ArrayList<Immunization> immunizations;
 
     public PatientDashboard() {
         insurance = null;
@@ -41,18 +43,20 @@ public class PatientDashboard extends Dashboard {
     }
 
     //Returns Patient Dashboard object from SQLite Database
-    public PatientDashboard select(int patientID){
+    public static PatientDashboard select(int patientID){
 
         //SQLite Queries
         String insSQL = "SELECT * FROM Insurance WHERE patientID = ? ";
-        String phaSQL = "SELECT * FROM Pharmacy WHERE patientID = ?";
-        String immSQL = "SELECT * FROM Immunizations WHERE patientID = ?";
+        String phaSQL = "SELECT * FROM Pharamacy WHERE patientID = ?";
+        String immSQL = "SELECT * FROM Immunization WHERE patientID = ?";
+
+        PatientDashboard  pat = new PatientDashboard();
 
         //Array List to hold immunizations
         immunizations = new ArrayList<Immunization>();
 
         //Establish Connection
-        try (Connection conn = Connect.conn ) {
+        try {
 
             //Gets Insurance from database
             PreparedStatement pstmt = conn.prepareStatement(insSQL);
@@ -77,8 +81,13 @@ public class PatientDashboard extends Dashboard {
                 immunizations.add(imm);
             }
 
-            return this;
+            pat.setImmunizations(immunizations);
+            pat.setInsurance(insurance);
+            pat.setPharmacy(pharmacy);
+
+            return pat;
         }catch(SQLException e){
+            System.out.println(e.getMessage());
             return null;
         }
     }

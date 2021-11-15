@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Locale;
 
 
@@ -51,7 +52,6 @@ public class Connect {
             String email = rs.getString("emailAddress");
             String password = rs.getString("password");
             int patientID = rs.getInt("patientID");
-
             if(user.equals(email) && pass.equals(password)){
                 return patientID;
             }
@@ -94,7 +94,6 @@ public class Connect {
             stmt.setLong(5,phone);
             stmt.setString(6,pass);
             stmt.executeUpdate();
-            stmt.close();
 
             return true;
         }catch(SQLException e){
@@ -102,13 +101,60 @@ public class Connect {
         }
     }
 
-    public static String getUser(int id) throws SQLException {
-        String sql = "SELECT name FROM Patient WHERE patientID = ?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
+    public static String getDoctorName(int id) throws SQLException {
+        String docSQL = "SELECT name FROM Doctor WHERE doctorID = (SELECT currentDoctor FROM Patient WHERE patientID = ?)";
+        String temp;
+        PreparedStatement stmt = conn.prepareStatement(docSQL);
         stmt.setInt(1, id);
         ResultSet rs = stmt.executeQuery();
-        String tepm = rs.getString("name");
-        return tepm;
+
+        temp = rs.getString("name");
+
+        rs.close();
+
+        return temp;
+    }
+
+    public static ArrayList<String> getUser(int id) throws SQLException {
+        String sql = "SELECT name, phoneNumber, emailAddress, address FROM Patient WHERE patientID = ?";
+
+        ArrayList<String> arr = new ArrayList<String>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            arr.add(rs.getString("name"));
+            arr.add(rs.getString("phoneNumber"));
+            arr.add(rs.getString("address"));
+            arr.add(rs.getString("emailAddress"));
+            rs.close();
+            arr.add(getDoctorName(id));
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+            arr = null;
+        }
+
+        return arr;
+    }
+
+    public static int getPatientDoctor(int id) {
+        String sql = "SELECT currentDoctor FROM Patient WHERE patientID = ?";
+        int doctorID;
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            doctorID = rs.getInt("currentDoctor");
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+            doctorID = 0;
+        }
+
+        return doctorID;
     }
 
     public static void changeScene (Button butt,String file, int id) throws IOException, SQLException {
@@ -117,8 +163,9 @@ public class Connect {
         Parent root = loader.load();
 
         LoggedController cont = loader.getController();
-        cont.setName(id);
+
         cont.setID(id);
+
 
         Stage window = (Stage) butt.getScene().getWindow();
         Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());

@@ -6,13 +6,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,18 +23,21 @@ import java.util.logging.Logger;
 public class LoggedController {
 
     @FXML
-    Label nameLabel;
+    Label nameLabel, patPhone, patName, patEmail, patAddress, patDoctor, insName, insPhone, insID, insAddress;
 
     @FXML
     private Hyperlink backPatDash, backDocDash;
     @FXML
     private Button submitNewInsurance, submitNewPatient, deletePatient, logoutButton, toMessages, appButt, visitSumButt, patHealthHistClick, prescriptionClick, docPatients, docVisit;
 
+
+
     private Parent root;
     private Scene scene;
     private Stage window;
 
     private int userID;
+    private int userDoctor;
 
     @FXML
     public void loadFX(Button butt, String file) throws Exception {
@@ -54,7 +60,37 @@ public class LoggedController {
 
     @FXML
     protected void setName(int id) throws SQLException {
-        nameLabel.setText(Connect.getUser(id));
+        ArrayList<String> arr = Connect.getUser(id);
+        nameLabel.setText(arr.get(0));
+        patName.setText(arr.get(0));
+        patPhone.setText(arr.get(1));
+        patAddress.setText(arr.get(2));
+        patEmail.setText(arr.get(3));
+        patDoctor.setText(arr.get(4));
+    }
+
+    @FXML
+    protected void setDash(PatientDashboard pat) throws Exception {
+        ArrayList<Immunization> imm;
+        Pharmacy pharm;
+        Insurance ins;
+
+        ins = pat.getInsurance();
+        try {
+            imm = pat.getImmunizations();
+            pharm = pat.getPharmacy();
+
+
+        }
+        catch (NullPointerException e) {
+
+        }
+
+        insName.setText(ins.getName());
+        insPhone.setText(Integer.toString(ins.getPhoneNumber()));
+        insAddress.setText(ins.getName());
+        insID.setText(ins.getName());
+
     }
 
 
@@ -64,6 +100,14 @@ public class LoggedController {
 
     protected int getID() {
         return userID;
+    }
+
+    protected void setDoctorID(int id) {
+        this.userDoctor = id;
+    }
+
+    protected int getDoctorID() {
+        return userDoctor;
     }
 
     @FXML
@@ -106,7 +150,8 @@ public class LoggedController {
 
     @FXML
     protected void onVisitClick() throws Exception{
-        loadFX(visitSumButt, "Visit Summary.fxml");
+        Connect.changeScene(visitSumButt, "Visit Summary.fxml", this.getID());
+        VisitSummary.selectVisitSummary(this.getID());
     }
 
     @FXML
@@ -116,7 +161,8 @@ public class LoggedController {
 
     @FXML
     protected void onMessagesClick() throws Exception{
-        loadFX(toMessages, "messages.fxml");
+        Connect.changeScene(toMessages, "messages.fxml", this.getID());
+        Message.getChat(this.getID(), this.getDoctorID());
     }
 
     @FXML
