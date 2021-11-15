@@ -117,9 +117,9 @@ public class VisitSummary {
             pstmt.setInt(1,visitNum);
             ResultSet result  = pstmt.executeQuery();
 
-            HealthIssues newIssue;
+
             while (result.next()) {
-                newIssue = new HealthIssues();
+                HealthIssues newIssue = new HealthIssues();
                 newIssue.setDescription(result.getString("description"));
                 newIssue.setDate(result.getString("date"));
                 newIssue.setName(result.getString("name"));
