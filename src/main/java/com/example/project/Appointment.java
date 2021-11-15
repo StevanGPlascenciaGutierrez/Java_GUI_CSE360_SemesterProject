@@ -1,5 +1,11 @@
 package com.example.project;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import static com.example.project.Connect.conn;
+
 public class Appointment {
     private String time;
     private String date;
@@ -56,4 +62,20 @@ public class Appointment {
     public void setNurse(Nurse newNurse) {
         this.nurse = newNurse;
     }
+
+    public void insert(String time, String date, int doctorID, int patientID, int nurseID){
+        String sql = "INSERT INTO APPOINTMENT(time, date, doctorID, patientID, nurseID) VALUES(?,?,?,?,?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, time);
+            pstmt.setString(2, date);
+            pstmt.setInt(3, doctorID);
+            pstmt.setInt(4, patientID);
+            pstmt.setInt(5, nurseID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

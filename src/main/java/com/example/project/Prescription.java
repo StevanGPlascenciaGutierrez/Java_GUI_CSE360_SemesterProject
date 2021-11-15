@@ -1,5 +1,11 @@
 package com.example.project;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import static com.example.project.Connect.conn;
+
 public class Prescription {
     private String name;
     private String startDate;
@@ -57,4 +63,20 @@ public class Prescription {
     public void setDosage(double newDosage) {
         this.dosage = newDosage;
     }
+
+    public static void insert(String name, String startDate, String endDate, String description, double dosage){
+        String sql = "INSERT INTO PRESCRIPTION(name, startDate, endDate, description, dosage) VALUES(?,?,?,?,?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setString(2, startDate);
+            pstmt.setString(3, endDate);
+            pstmt.setString(4, description);
+            pstmt.setDouble(5, dosage);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

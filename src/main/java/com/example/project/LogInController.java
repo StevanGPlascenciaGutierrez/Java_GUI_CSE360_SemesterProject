@@ -32,7 +32,13 @@ public class LogInController {
     private Label signInLabel, staffSignInLabel, signUpLabel;
 
     @FXML
-    private DatePicker signUpBday;
+    private DatePicker signUpBday, choiceDate;
+
+    @FXML
+    private ComboBox doctorChoice, choiceTime;
+
+    @FXML
+    private TextArea doctorInfo;
 
     private Parent root;
     private Scene scene;
@@ -57,7 +63,7 @@ public class LogInController {
         window.show();
     }
 
-    public static void logIn (Button butt,String file, int id, PatientDashboard pat) throws Exception {
+    public void logIn (Button butt,String file, int id, PatientDashboard pat) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Project.class.getResource(file));
         Parent root = loader.load();
@@ -71,7 +77,6 @@ public class LogInController {
 
 
         Stage window = (Stage) butt.getScene().getWindow();
-        window.setUserData(new Patient());
         Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
         window.setScene(scene);
         window.show();
@@ -87,6 +92,24 @@ public class LogInController {
         box.showAndWait();
     }
 
+    public void staffLoginEvent (Button butt,String file, int id, DoctorDashboard doc) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource(file));
+        Parent root = loader.load();
+
+        LoggedStaffController cont = loader.getController();
+
+        cont.setID(id);
+        cont.setName(id);
+        cont.setDash(doc);
+
+
+        Stage window = (Stage) butt.getScene().getWindow();
+        Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
+    }
+
     @FXML
     protected void onStaffLogin() throws Exception{
         if (staffID.getText().isBlank() || staffPassword.getText().isBlank()) {
@@ -100,7 +123,9 @@ public class LogInController {
                     staffSignInLabel.setText("ID or password is incorrect");
                 }
                 else {
-                    Connect.changeScene(staffLogin, "DoctorDashboard.fxml", m);
+                    DoctorDashboard doc = new DoctorDashboard();
+                    doc.select(m);
+                    staffLoginEvent(staffLogin, "DoctorDashboard.fxml", m, doc);
                 }
             }
             catch (NumberFormatException e) {
@@ -156,8 +181,11 @@ public class LogInController {
                         signUpPassword.getText(), signUpAddress.getText(), Long.parseLong(signUpPhone.getText()));
 
                 popup("firstAppointment");
+                Appointment app = new Appointment();
+                app.insert(choiceTime.toString(), choiceDate.toString(), Integer.valueOf(doctorChoice.toString()), 1, 1);
 
                 popup("insurance");
+
 
                 popup("pharmacy");
 

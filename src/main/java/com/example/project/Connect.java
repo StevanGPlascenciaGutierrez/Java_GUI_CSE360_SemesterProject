@@ -157,22 +157,6 @@ public class Connect {
         return doctorID;
     }
 
-    public static void changeScene (Button butt,String file, int id) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Project.class.getResource(file));
-        Parent root = loader.load();
-
-        LoggedController cont = loader.getController();
-
-        cont.setID(id);
-
-
-        Stage window = (Stage) butt.getScene().getWindow();
-        Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
-        window.setScene(scene);
-        window.show();
-    }
-
     public void close(Connection conn){
         try {
             conn.close();

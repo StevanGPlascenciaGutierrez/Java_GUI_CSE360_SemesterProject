@@ -2,7 +2,11 @@ package com.example.project;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import static com.example.project.Connect.conn;
 
 public class Patient {
     private String name;
@@ -142,8 +146,8 @@ public class Patient {
 
     public static void insert(String Name, String Address, String Email, int phoneNum){
         String sql = "INSERT INTO PATIENT(name, address, emailAddress, phoneNumber) VALUES(?,?,?,?)";
-        try (Connection conn = Connect.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, Name);
             pstmt.setString(2, Address);
             pstmt.setString(3, Email);
@@ -153,4 +157,27 @@ public class Patient {
             System.out.println(e.getMessage());
         }
     }
+
+    public ArrayList<Patient> select(int id) {
+        String sql = "SELECT * FROM Patient WHERE doctorID = ?)";
+        ArrayList<Patient> patList = new ArrayList<Patient>();
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+                Patient pat = new Patient();
+                pat.setID(rs.getInt("patientID"));
+                pat.setName(rs.getString("name"));
+                patList.add(pat);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+         return patList;
+    }
+
 }

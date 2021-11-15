@@ -3,6 +3,8 @@ package com.example.project;
 import java.sql.*;
 import java.util.ArrayList;
 
+import static com.example.project.Connect.conn;
+
 public class DoctorDashboard extends Dashboard {
     private VisitSummary visitSummary;
     private ArrayList<Appointment> appointments;
@@ -49,7 +51,7 @@ public class DoctorDashboard extends Dashboard {
         String aptSQL = "SELECT * FROM appointments WHERE doctorID = ? ";
 
         //Connects To Database
-        try (Connection conn = Connect.conn ) {
+        try  {
 
             //Prepares Statement
             PreparedStatement pstmt = conn.prepareStatement(aptSQL);
