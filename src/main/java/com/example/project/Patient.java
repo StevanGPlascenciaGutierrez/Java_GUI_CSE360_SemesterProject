@@ -1,8 +1,17 @@
 package com.example.project;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -172,6 +181,16 @@ public class Patient {
         }
     }
 
+    public void delete(int id){
+        String sql = "DELETE FROM Patient WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public ArrayList<Patient> select(int id) {
         String sql = "SELECT * FROM Patient WHERE currentDoctor = ?";
         ArrayList<Patient> patList = new ArrayList<Patient>();
@@ -187,7 +206,46 @@ public class Patient {
                 pat.setName(rs.getString("name"));
                 Hyperlink hyper = new Hyperlink();
                 hyper.setText("more details");
+
+                PatientDashboard patDash = new PatientDashboard();
+                patDash.select(rs.getInt("patientID"));
+
+                hyper.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(Project.class.getResource("DoctorView.fxml"));
+                        Parent root = null;
+                        try {
+                            root = loader.load();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        LoggedStaffController cont = loader.getController();
+
+                        Stage box = new Stage();
+                        Scene scene = new Scene(root);
+                        box.setUserData(pat);
+
+                        PatientDashboard dash = new PatientDashboard();
+                        dash.select(pat.getID());
+                        try {
+                            cont.setDoctorView(dash, pat.getID());
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+
+                        box.initModality(Modality.APPLICATION_MODAL);
+                        box.setResizable(false);
+                        box.setScene(scene);
+                        box.showAndWait();
+                    }
+                });
+
                 pat.setLink(hyper);
+
+
                 patList.add(pat);
             }
 

@@ -24,7 +24,7 @@
          <items>
             <TextFlow prefHeight="42.0" prefWidth="211.0" style="-fx-border-color: black; -fx-text-alignment: center; -fx-border-radius: 15;" textAlignment="CENTER">
                <children>
-                  <Label alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Patient Name" textAlignment="CENTER" translateY="1.0" wrapText="true" />
+                  <Label fx:id="patIDLabel" alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Patient ID" textAlignment="CENTER" translateY="1.0" wrapText="true" />
                </children>
             </TextFlow>
             <Hyperlink fx:id="backPatSearch" alignment="CENTER" onAction="#onBackPatSearchClick" text="Back" textAlignment="CENTER" underline="true" />
@@ -67,11 +67,11 @@
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Name" textAlignment="CENTER" wrapText="true" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Address" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Email" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
-                              <Label text="Label" GridPane.columnIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="patNameLabel" text="Label" GridPane.columnIndex="1" />
+                              <Label fx:id="patAddressLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="patEmailLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Phone Number" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="patPhoneLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
                      </children>
@@ -89,19 +89,16 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Member Name" textAlignment="CENTER" wrapText="true" />
+                              <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Insurance Name" textAlignment="CENTER" wrapText="true" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Member ID" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Address" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
-                              <Label text="Label" GridPane.columnIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Patient Info" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
-                              <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Patient Info" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <Label fx:id="insName" text="Label" GridPane.columnIndex="1" />
+                              <Label fx:id="insID" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="insAddress" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Phone Number" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
+                              <Label fx:id="insPhone" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
                      </children>
@@ -123,9 +120,9 @@
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Name" textAlignment="CENTER" wrapText="true" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Address" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Phone Number" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
-                              <Label text="Label" GridPane.columnIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="pharmName" text="Label" GridPane.columnIndex="1" />
+                              <Label fx:id="pharmAddress" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="pharmPhone" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                      </children>
@@ -143,11 +140,11 @@
                         </ToolBar>
                      </top>
                      <center>
-                        <TableView prefHeight="300.0" prefWidth="558.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="patImmune" prefHeight="300.0" prefWidth="558.0" BorderPane.alignment="CENTER">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Vaccine" />
-                              <TableColumn prefWidth="75.0" text="From" />
-                            <TableColumn prefWidth="75.0" text="To" />
+                            <TableColumn fx:id="patVaccine" prefWidth="75.0" text="Vaccine" />
+                              <TableColumn fx:id="patVaccDate" prefWidth="75.0" text="Date" />
+                            <TableColumn fx:id="patDescription" prefWidth="75.0" text="Description" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

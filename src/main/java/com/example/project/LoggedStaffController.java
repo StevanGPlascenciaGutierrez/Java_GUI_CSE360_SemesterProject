@@ -24,13 +24,16 @@ import static com.example.project.Connect.conn;
 public class LoggedStaffController {
 
     @FXML
-    private Hyperlink backDocDash;
+    private Hyperlink backDocDash, backPatSearch;
 
     @FXML
     private Button deletePatient, docPatients, docVisit, logoutButton, searchButton;
 
     @FXML
-    private Label nameLabel;
+    private Label nameLabel, insName, insPhone, insAddress, insID, pharmName, pharmAddress, pharmPhone;
+
+    @FXML
+    private Label patIDLabel, patNameLabel, patAddressLabel, patEmailLabel, patPhoneLabel;
 
     @FXML
     private TableView <Appointment> patAppointTable;
@@ -47,6 +50,12 @@ public class LoggedStaffController {
     @FXML
     private TextField searchBar;
 
+    @FXML
+    private TableView<Immunization> patImmune;
+
+    @FXML
+    private TableColumn<Immunization, String> patVaccDate, patDescription, patVaccine;
+
     private Parent root;
     private Scene scene;
     private Stage window;
@@ -59,6 +68,44 @@ public class LoggedStaffController {
 
     protected int getID() {
         return userID;
+    }
+
+    @FXML
+    protected void setDoctorView(PatientDashboard pat, int id) throws Exception {
+        ArrayList<Immunization> imm;
+        Pharmacy pharm;
+        Insurance ins;
+
+        ins = pat.getInsurance();
+        imm = pat.getImmunizations();
+        pharm = pat.getPharmacy();
+
+        insName.setText(ins.getName());
+        insPhone.setText(Integer.toString(ins.getPhoneNumber()));
+        insAddress.setText(ins.getName());
+        insID.setText(ins.getName());
+
+        pharmName.setText(pharm.getName());
+        pharmAddress.setText(pharm.getAddress());
+        pharmPhone.setText(Integer.toString(pharm.getPhoneNumber()));
+
+        ArrayList<String> arr = Connect.getUser(id);
+
+        patIDLabel.setText("Patient ID: " + Integer.toString(id));
+        patNameLabel.setText(arr.get(0));
+        patAddressLabel.setText(arr.get(2));
+        patEmailLabel.setText(arr.get(3));
+        patPhoneLabel.setText(arr.get(1));
+
+        ObservableList<Immunization> immune = FXCollections.observableArrayList(imm);
+        try {
+            patVaccine.setCellValueFactory(new PropertyValueFactory<Immunization, String>("type"));
+            patVaccDate.setCellValueFactory(new PropertyValueFactory<Immunization, String>("date"));
+            patDescription.setCellValueFactory(new PropertyValueFactory<Immunization, String>("description"));
+            patImmune.setItems(immune);
+        } catch (NullPointerException e) {
+
+        }
     }
 
     protected void changeScene (Button butt,String file, int id) throws IOException, SQLException {
@@ -195,9 +242,18 @@ public class LoggedStaffController {
         deleteAlert.setContentText("Are you sure you want to delete this patient?");
 
         if (deleteAlert.showAndWait().get() == ButtonType.OK) {
-
-            changeScene(deletePatient, "DoctorDashboard.fxml", this.getID());
+            Patient pat = new Patient();
+            pat.delete(this.getID());
+            Stage box = (Stage) deletePatient.getScene().getWindow();
+            box.setUserData(null);
+            box.close();
         }
+    }
+
+    @FXML
+    protected void onBackPatSearchClick() throws Exception {
+        Stage box = (Stage) backPatSearch.getScene().getWindow();
+        box.close();
     }
 
     @FXML
