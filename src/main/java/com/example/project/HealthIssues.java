@@ -40,4 +40,16 @@ public class HealthIssues {
     public void setDate(String date) {
         this.date = date;
     }
+    public static void insert(String Name, String Description, String Date){
+        String sql = "INSERT INTO PATIENT(name, description, date) VALUES(?,?,?)";
+        try (Connection conn = Connect.conn;
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, Name);
+            pstmt.setString(2, Description);
+            pstmt.setString(3, Date);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
