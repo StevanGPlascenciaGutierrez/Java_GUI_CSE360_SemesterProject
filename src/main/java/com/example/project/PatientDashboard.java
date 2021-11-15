@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import static com.example.project.Connect.conn;
 
 public class PatientDashboard extends Dashboard {
-    private static Insurance insurance;
-    private static Pharmacy pharmacy;
-    private static ArrayList<Immunization> immunizations;
+    private Insurance insurance;
+    private Pharmacy pharmacy;
+    private ArrayList<Immunization> immunizations;
 
     public PatientDashboard() {
         insurance = null;
@@ -43,7 +43,7 @@ public class PatientDashboard extends Dashboard {
     }
 
     //Returns Patient Dashboard object from SQLite Database
-    public static PatientDashboard select(int patientID){
+    public PatientDashboard select(int patientID){
 
         //SQLite Queries
         String insSQL = "SELECT * FROM Insurance WHERE patientID = ? ";

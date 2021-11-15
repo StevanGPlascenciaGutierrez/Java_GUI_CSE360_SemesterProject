@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.example.project.Connect.conn;
+
 public class Message {
     private String content;
     private String sender;
@@ -59,17 +61,15 @@ public class Message {
         timeStamp = newTime;
     }
 
-    public ArrayList<Message> selectHealth(int patientID, int doctorID)
-    {
+    public ArrayList<Message> selectHealth(int patientID, int doctorID) throws SQLException {
         String sql = "SELECT Content "
                 + "FROM Messages WHERE ChatNum = ?";
 
         ArrayList<Message> messageList = new ArrayList<>();
 
         // Connects
-        try (Connection conn = Connect.conn;
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
-
+        try {
+            PreparedStatement pstmt  = conn.prepareStatement(sql);
             // Creates a prepared statement
             int chatNUMBER = getChat(patientID, doctorID);
             pstmt.setInt(1,chatNUMBER);
@@ -82,7 +82,8 @@ public class Message {
                 newMessage.setChatNum(chatNUMBER);
                 messageList.add(newMessage);
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return messageList;
@@ -90,8 +91,8 @@ public class Message {
 
     public static void insertMessage(String content, int patientID, int doctorID){
         String sql = "INSERT INTO Messages(Content,ChatNum) VALUES(?,?)";
-        try (Connection conn = Connect.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, content);
             pstmt.setInt(2,getChat(patientID,doctorID));
             pstmt.executeUpdate();
@@ -105,9 +106,9 @@ public class Message {
                 + "FROM Chat WHERE patientID = ? AND doctorID = ?";
 
         // Connects
-        try (Connection conn = Connect.conn;
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+        try {
 
+            PreparedStatement pstmt  = conn.prepareStatement(sql);
             // Creates a prepared statement
             pstmt.setInt(1,patientID);
             pstmt.setInt(2,doctorID);
@@ -130,8 +131,8 @@ public class Message {
     }
     public static void insertChat(int patientID, int doctorID){
         String sql = "INSERT INTO Chat(patientID,doctorID) VALUES(?,?)";
-        try (Connection conn = Connect.conn;
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1,patientID);
             pstmt.setInt(2,doctorID);
             pstmt.executeUpdate();

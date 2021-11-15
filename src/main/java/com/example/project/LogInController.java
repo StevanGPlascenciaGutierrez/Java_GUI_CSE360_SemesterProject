@@ -20,7 +20,7 @@ public class LogInController {
     @FXML
     private Hyperlink signUp, backLogin, doctorLogin;
     @FXML
-    private Button patientSignUp, loginButton, staffLogin;
+    private Button patientSignUp, loginButton, staffLogin, firstAppointment, submitInsurance, submitPharmacy;
 
     @FXML
     private TextField patientEmail, staffID, signUpFirst, signUpLast, signUpEmail, signUpPhone, signUpAddress;
@@ -57,7 +57,7 @@ public class LogInController {
         window.show();
     }
 
-    public void logIn (Button butt,String file, int id, PatientDashboard pat) throws Exception {
+    public static void logIn (Button butt,String file, int id, PatientDashboard pat) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Project.class.getResource(file));
         Parent root = loader.load();
@@ -75,6 +75,16 @@ public class LogInController {
         Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
         window.setScene(scene);
         window.show();
+    }
+
+    public void popup (String file) throws IOException {
+        Parent root = FXMLLoader.load(Project.class.getResource(file));
+        Stage box = new Stage();
+        scene = new Scene(root);
+        box.initModality(Modality.APPLICATION_MODAL);
+        box.setResizable(false);
+        box.setScene(scene);
+        box.showAndWait();
     }
 
     @FXML
@@ -115,6 +125,24 @@ public class LogInController {
     }
 
     @FXML
+    protected void onEnterAppointment() throws Exception {
+        Stage box = (Stage) firstAppointment.getScene().getWindow();
+        box.close();
+    }
+
+    @FXML
+    protected void onEnterInsurance() throws Exception {
+        Stage box = (Stage) submitInsurance.getScene().getWindow();
+        box.close();
+    }
+
+    @FXML
+    protected void onEnterPharmacy() throws Exception {
+        Stage box = (Stage) submitPharmacy.getScene().getWindow();
+        box.close();
+    }
+
+    @FXML
     protected void onPatientSignUp() throws Exception {
         try {
             if (signUpFirst.getText().isBlank() || signUpLast.getText().isBlank() ||
@@ -126,6 +154,12 @@ public class LogInController {
 
                 Connect.signUp(signUpFirst.getText(), signUpLast.getText(), signUpBday.getValue().toString(), signUpEmail.getText(),
                         signUpPassword.getText(), signUpAddress.getText(), Long.parseLong(signUpPhone.getText()));
+
+                popup("firstAppointment");
+
+                popup("insurance");
+
+                popup("pharmacy");
 
                 loadFX(patientSignUp, "login.fxml");
 
@@ -148,7 +182,8 @@ public class LogInController {
                 signInLabel.setText("username or password is incorrect");
             }
             else {
-                PatientDashboard pat = PatientDashboard.select(m);
+                PatientDashboard pat = new PatientDashboard();
+                pat.select(m);
 
                 logIn(loginButton, "Patient Dashboard.fxml", m, pat);
             }

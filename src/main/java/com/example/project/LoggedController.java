@@ -26,6 +26,9 @@ public class LoggedController {
     Label nameLabel, patPhone, patName, patEmail, patAddress, patDoctor, insName, insPhone, insID, insAddress;
 
     @FXML
+    Label pharmName, pharmAddress, pharmPhone;
+
+    @FXML
     private Hyperlink backPatDash, backDocDash;
     @FXML
     private Button submitNewInsurance, submitNewPatient, deletePatient, logoutButton, toMessages, appButt, visitSumButt, patHealthHistClick, prescriptionClick, docPatients, docVisit;
@@ -76,20 +79,17 @@ public class LoggedController {
         Insurance ins;
 
         ins = pat.getInsurance();
-        try {
-            imm = pat.getImmunizations();
-            pharm = pat.getPharmacy();
-
-
-        }
-        catch (NullPointerException e) {
-
-        }
+        imm = pat.getImmunizations();
+        pharm = pat.getPharmacy();
 
         insName.setText(ins.getName());
         insPhone.setText(Integer.toString(ins.getPhoneNumber()));
         insAddress.setText(ins.getName());
         insID.setText(ins.getName());
+
+        pharmName.setText(pharm.getName());
+        pharmAddress.setText(pharm.getAddress());
+        pharmPhone.setText(Integer.toString(pharm.getPhoneNumber()));
 
     }
 
@@ -156,7 +156,7 @@ public class LoggedController {
 
     @FXML
     protected void onAppButtClick() throws Exception{
-        loadFX(appButt, "PatientAppointment.fxml");
+        Connect.changeScene(toMessages, "PatientAppointment.fxml", this.getID());
     }
 
     @FXML
@@ -165,9 +165,31 @@ public class LoggedController {
         Message.getChat(this.getID(), this.getDoctorID());
     }
 
+    public static void logIn (Hyperlink butt,String file, int id, PatientDashboard pat) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource(file));
+        Parent root = loader.load();
+
+        LoggedController cont = loader.getController();
+
+        cont.setID(id);
+        cont.setDoctorID(Connect.getPatientDoctor(id));
+        cont.setName(id);
+        cont.setDash(pat);
+
+
+        Stage window = (Stage) butt.getScene().getWindow();
+        window.setUserData(new Patient());
+        Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
+    }
+
     @FXML
     protected void PatDashClick() throws Exception{
-        loadFX(backPatDash, "Patient Dashboard.fxml");
+        PatientDashboard pat = new PatientDashboard();
+        pat.select(this.getID());
+        logIn(backPatDash, "Patient Dashboard.fxml", this.getID(), pat);
     }
 
     @FXML

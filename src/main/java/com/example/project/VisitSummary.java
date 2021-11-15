@@ -3,6 +3,8 @@ package com.example.project;
 import java.sql.*;
 import java.util.ArrayList;
 
+import static com.example.project.Connect.conn;
+
 public class VisitSummary {
     private String date;
     private Vitals vitals;
@@ -56,9 +58,9 @@ public class VisitSummary {
         ArrayList<VisitSummary> visits = new ArrayList<>();
 
         // Connects
-        try (Connection conn = Connect.conn;
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+        try {
 
+            PreparedStatement pstmt  = conn.prepareStatement(sql);
             // Creates a prepared statement
             pstmt.setInt(1,patientID);
             ResultSet result  = pstmt.executeQuery();
@@ -86,9 +88,9 @@ public class VisitSummary {
                 + "FROM VITALS WHERE visitNumber = ?";
 
         // Connects
-        try (Connection conn = Connect.conn;
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+        try {
 
+            PreparedStatement pstmt  = conn.prepareStatement(sql);
             // Creates a prepared statement
             pstmt.setInt(1,visitNum);
             ResultSet result  = pstmt.executeQuery();
@@ -110,9 +112,9 @@ public class VisitSummary {
         ArrayList<HealthIssues> issues = new ArrayList<>();
 
         // Connects
-        try (Connection conn = Connect.conn;
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+        try {
 
+            PreparedStatement pstmt  = conn.prepareStatement(sql);
             // Creates a prepared statement
             pstmt.setInt(1,visitNum);
             ResultSet result  = pstmt.executeQuery();
