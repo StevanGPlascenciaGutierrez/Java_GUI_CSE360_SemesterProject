@@ -1,5 +1,9 @@
 package com.example.project;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class Vitals {
     private double bloodPressure;
     private double heartRate;
@@ -46,6 +50,20 @@ public class Vitals {
 
     public void setDescription(Double newBodyTemp) {
         this.bodyTemp = newBodyTemp;
+    }
+    
+    public static void insert(double BloodPressure, double HeartRate, double RespiratoryRate, double BodyTemp){
+        String sql = "INSERT INTO PATIENT(bloodPressure, heartRate, respiratoryRate, bodyTemp) VALUES(?,?,?,?)";
+        try (Connection conn = Connect.conn;
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setdouble(1, BloodPressure);
+            pstmt.setdouble(2, HeartRate);
+            pstmt.setdouble(3, RespiratoryRate);
+            pstmt.setdouble(4, BodyTemp);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }
