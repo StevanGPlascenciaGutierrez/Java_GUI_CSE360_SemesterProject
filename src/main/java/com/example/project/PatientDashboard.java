@@ -1,6 +1,12 @@
 package com.example.project;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import static com.example.project.Connect.conn;
 
 public class PatientDashboard extends Dashboard {
     private Insurance insurance;
@@ -34,5 +40,55 @@ public class PatientDashboard extends Dashboard {
     }
     public void setImmunizations(ArrayList<Immunization> newImmunizations) {
         immunizations = newImmunizations;
+    }
+
+    //Returns Patient Dashboard object from SQLite Database
+    public PatientDashboard select(int patientID){
+
+        //SQLite Queries
+        String insSQL = "SELECT * FROM Insurance WHERE patientID = ? ";
+        String phaSQL = "SELECT * FROM Pharamacy WHERE patientID = ?";
+        String immSQL = "SELECT * FROM Immunization WHERE patientID = ?";
+
+        PatientDashboard  pat = new PatientDashboard();
+
+        //Array List to hold immunizations
+        immunizations = new ArrayList<Immunization>();
+
+        //Establish Connection
+        try {
+
+            //Gets Insurance from database
+            PreparedStatement pstmt = conn.prepareStatement(insSQL);
+            pstmt.setInt(1, patientID);
+            ResultSet rs = pstmt.executeQuery();
+            insurance = new Insurance(rs.getString("name"),rs.getInt("phoneNumber"));
+
+
+            //Gets Pharmacy from database
+            pstmt = conn.prepareStatement(phaSQL);
+            pstmt.setInt(1, patientID);
+            rs = pstmt.executeQuery();
+            pharmacy = new Pharmacy(rs.getString("name"),rs.getString("address"),rs.getInt("phoneNumber"));
+
+
+            //Gets Immunizations from database
+            pstmt = conn.prepareStatement(immSQL);
+            pstmt.setInt(1,patientID);
+            rs = pstmt.executeQuery();
+            while(rs.next()){
+                Immunization imm = new Immunization(rs.getString("type"), rs.getString("date"), rs.getString("description"));
+                immunizations.add(imm);
+            }
+
+            pat.setImmunizations(immunizations);
+            pat.setInsurance(insurance);
+            pat.setPharmacy(pharmacy);
+
+            return pat;
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }

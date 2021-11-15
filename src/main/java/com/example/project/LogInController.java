@@ -10,25 +10,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
-public class LogInController implements Initializable {
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        conn = Connect.Connect();
-    }
+public class LogInController {
+
 
     @FXML
-    private Hyperlink signUp, backLogin, doctorLogin, backPatDash, backDocDash;
+    private Hyperlink signUp, backLogin, doctorLogin;
     @FXML
-    private Button submitNewInsurance, submitNewPatient, deletePatient, patientSignUp, loginButton, logoutButton, toMessages, appButt, visitSumButt, patHealthHistClick, prescriptionClick, staffLogin, docPatients, docVisit;
+    private Button patientSignUp, loginButton, staffLogin, firstAppointment, submitInsurance, submitPharmacy;
 
     @FXML
     private TextField patientEmail, staffID, signUpFirst, signUpLast, signUpEmail, signUpPhone, signUpAddress;
@@ -46,14 +38,12 @@ public class LogInController implements Initializable {
     private Scene scene;
     private Stage window;
 
-    private Connection conn = null;
-    private PreparedStatement pst =  null;
 
     @FXML
     public void loadFX(Button butt, String file) throws Exception {
         root = FXMLLoader.load(Project.class.getResource(file));
         window = (Stage) butt.getScene().getWindow();
-        scene = new Scene(root);
+        scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
         window.setScene(scene);
         window.show();
     }
@@ -62,115 +52,39 @@ public class LogInController implements Initializable {
     public void loadFX(Hyperlink butt, String file) throws Exception {
         root = FXMLLoader.load(Project.class.getResource(file));
         window = (Stage) butt.getScene().getWindow();
-        scene = new Scene(root);
+        scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
         window.setScene(scene);
         window.show();
     }
 
-    @FXML
-    protected void deletePatientData() throws Exception {
-        Alert deleteAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        deleteAlert.setTitle("Warning");
-        deleteAlert.setHeaderText("You are about to delete this patient from the system");
-        deleteAlert.setContentText("Are you sure you want to delete this patient?");
+    public static void logIn (Button butt,String file, int id, PatientDashboard pat) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource(file));
+        Parent root = loader.load();
 
-        if (deleteAlert.showAndWait().get() == ButtonType.OK) {
+        LoggedController cont = loader.getController();
 
-            loadFX(deletePatient, "DoctorDashboard.fxml");
-        }
+        cont.setID(id);
+        cont.setDoctorID(Connect.getPatientDoctor(id));
+        cont.setName(id);
+        cont.setDash(pat);
+
+
+        Stage window = (Stage) butt.getScene().getWindow();
+        window.setUserData(new Patient());
+        Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
     }
 
-    @FXML
-    protected void onDocDashClick() throws Exception {
-        loadFX(backDocDash, "DoctorDashboard.fxml");
-    }
-
-    @FXML
-    protected void onDocVisitClick() throws Exception {
-        loadFX(docVisit, "DoctorVisitSummary.fxml");
-    }
-
-    @FXML
-    protected void onDocPatientClick() throws Exception {
-        loadFX(docPatients, "PatientSearch.fxml");
-    }
-
-    @FXML
-    protected void onPatHealthClick() throws Exception{
-        loadFX(patHealthHistClick, "Patient Health History.fxml");
-    }
-
-    @FXML
-    protected void onPreClick() throws Exception{
-        loadFX(prescriptionClick, "PrescriptionHistory.fxml");
-    }
-
-    @FXML
-    protected void onVisitClick() throws Exception{
-        loadFX(visitSumButt, "Visit Summary.fxml");
-    }
-
-    @FXML
-    protected void onAppButtClick() throws Exception{
-        loadFX(appButt, "PatientAppointment.fxml");
-    }
-
-    @FXML
-    protected void onMessagesClick() throws Exception{
-        loadFX(toMessages, "messages.fxml");
-    }
-
-    @FXML
-    protected void PatDashClick() throws Exception{
-        loadFX(backPatDash, "Patient Dashboard.fxml");
-    }
-
-    @FXML
-    protected void onLogout() throws Exception{
-        Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        logoutAlert.setTitle("Logout");
-        logoutAlert.setHeaderText("You're about to log out");
-        logoutAlert.setContentText("Are you sure you want to log out");
-
-        if (logoutAlert.showAndWait().get() == ButtonType.OK) {
-            loadFX(logoutButton, "login.fxml");
-        }
-    }
-
-    @FXML
-    protected void onSubmitPatient() throws Exception {
-        Stage box = (Stage) submitNewPatient.getScene().getWindow();
-        box.close();
-    }
-
-    @FXML
-    protected void onEditPatient() throws Exception {
-        Parent root = FXMLLoader.load(Project.class.getResource("EditPatient.fxml"));
+    public void popup (String file) throws IOException {
+        Parent root = FXMLLoader.load(Project.class.getResource(file));
         Stage box = new Stage();
         scene = new Scene(root);
         box.initModality(Modality.APPLICATION_MODAL);
         box.setResizable(false);
         box.setScene(scene);
         box.showAndWait();
-
-    }
-
-    @FXML
-    protected void onSubmitInsurance() throws Exception {
-        Stage box = (Stage) submitNewInsurance.getScene().getWindow();
-        box.close();
-    }
-
-    @FXML
-    protected void onEditInsurance() throws Exception {
-        Parent root = FXMLLoader.load(Project.class.getResource("EditInsurance.fxml"));
-        Stage box = new Stage();
-        scene = new Scene(root);
-        box.initModality(Modality.APPLICATION_MODAL);
-        box.setResizable(false);
-        box.setScene(scene);
-        box.showAndWait();
-
     }
 
     @FXML
@@ -179,7 +93,20 @@ public class LogInController implements Initializable {
             staffSignInLabel.setText("Please enter an email and password");
         }
         else {
-            loadFX(staffLogin, "DoctorDashboard.fxml");
+            int m;
+            try {
+                m = Connect.loginStaff(Integer.parseInt(staffID.getText()), staffPassword.getText());
+                if (m == -1) {
+                    staffSignInLabel.setText("ID or password is incorrect");
+                }
+                else {
+                    Connect.changeScene(staffLogin, "DoctorDashboard.fxml", m);
+                }
+            }
+            catch (NumberFormatException e) {
+                staffSignInLabel.setText("Please enter an integer for the ID");
+            }
+
         }
     }
 
@@ -198,6 +125,24 @@ public class LogInController implements Initializable {
     }
 
     @FXML
+    protected void onEnterAppointment() throws Exception {
+        Stage box = (Stage) firstAppointment.getScene().getWindow();
+        box.close();
+    }
+
+    @FXML
+    protected void onEnterInsurance() throws Exception {
+        Stage box = (Stage) submitInsurance.getScene().getWindow();
+        box.close();
+    }
+
+    @FXML
+    protected void onEnterPharmacy() throws Exception {
+        Stage box = (Stage) submitPharmacy.getScene().getWindow();
+        box.close();
+    }
+
+    @FXML
     protected void onPatientSignUp() throws Exception {
         try {
             if (signUpFirst.getText().isBlank() || signUpLast.getText().isBlank() ||
@@ -206,33 +151,15 @@ public class LogInController implements Initializable {
                 signUpLabel.setText("Please enter valid entries for each field");
             }
             else {
-                String sql = "INSERT INTO Patient(name, emailAddress, birthday, address, phoneNumber, password) VALUES(?, ?, ?, ?, ?, ?)";
 
+                Connect.signUp(signUpFirst.getText(), signUpLast.getText(), signUpBday.getValue().toString(), signUpEmail.getText(),
+                        signUpPassword.getText(), signUpAddress.getText(), Long.parseLong(signUpPhone.getText()));
 
-                String name = signUpFirst.getText() + " " + signUpLast.getText();
-                String email = signUpEmail.getText();
-                String password = signUpPassword.getText();
-                String bday = signUpBday.getValue().toString();
-                String address = signUpAddress.getText();
-                long phone = Long.parseLong(signUpPhone.getText());
+                popup("firstAppointment");
 
+                popup("insurance");
 
-                try {
-                    pst = conn.prepareStatement(sql);
-                    pst.setString(1, name);
-                    pst.setString(2, email);
-                    pst.setString(3, bday);
-                    pst.setString(4, address);
-                    pst.setLong(5, phone);
-                    pst.setString(6, password);
-                }
-                catch (SQLException e) {
-                    Logger.getLogger(LogInController.class.getName()).log(Level.SEVERE, null, e);
-                }
-
-                int i = pst.executeUpdate();
-
-                if (i == 1) System.out.println("success");
+                popup("pharmacy");
 
                 loadFX(patientSignUp, "login.fxml");
 
@@ -250,7 +177,16 @@ public class LogInController implements Initializable {
             signInLabel.setText("Please enter an email and password");
         }
         else {
-            loadFX(loginButton, "Patient Dashboard.fxml");
+            int m = Connect.loginPatient(patientEmail.getText(), patientPassword.getText());
+            if (m == -1) {
+                signInLabel.setText("username or password is incorrect");
+            }
+            else {
+                PatientDashboard pat = new PatientDashboard();
+                pat.select(m);
+
+                logIn(loginButton, "Patient Dashboard.fxml", m, pat);
+            }
         }
 
     }

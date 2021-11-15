@@ -1,5 +1,9 @@
 package com.example.project;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class Patient {
     private String name;
     private double weight;
@@ -134,5 +138,19 @@ public class Patient {
 
     public void setCurrentDoctor(Doctor currentDoctor) {
         this.currentDoctor = currentDoctor;
+    }
+
+    public static void insert(String Name, String Address, String Email, int phoneNum){
+        String sql = "INSERT INTO PATIENT(name, address, emailAddress, phoneNumber) VALUES(?,?,?,?)";
+        try (Connection conn = Connect.conn;
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, Name);
+            pstmt.setString(2, Address);
+            pstmt.setString(3, Email);
+            pstmt.setInt(4,phoneNum);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
