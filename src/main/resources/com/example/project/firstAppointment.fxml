@@ -29,7 +29,7 @@
                         </Label>
                      </children>
                   </HBox>
-                  <Label alignment="CENTER" prefHeight="50.0" prefWidth="301.0" text="Now set up your first appointment" textAlignment="CENTER" textFill="#001eff">
+                  <Label fx:id="patAppLabel" alignment="CENTER" prefHeight="50.0" prefWidth="301.0" text="Now set up your first appointment" textAlignment="CENTER" textFill="#001eff">
                      <font>
                         <Font size="16.0" />
                      </font>

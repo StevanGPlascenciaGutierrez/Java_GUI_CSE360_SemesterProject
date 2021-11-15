@@ -1,10 +1,15 @@
 package com.example.project;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.example.project.Connect.conn;
 
@@ -21,10 +27,25 @@ public class LoggedStaffController {
     private Hyperlink backDocDash;
 
     @FXML
-    private Button deletePatient, appButt, docPatients, docVisit, logoutButton;
+    private Button deletePatient, docPatients, docVisit, logoutButton, searchButton;
 
     @FXML
     private Label nameLabel;
+
+    @FXML
+    private TableView <Appointment> patAppointTable;
+
+    @FXML
+    private TableColumn <Appointment, String> patNameCol, patDateCol, patTimeCol;
+
+    @FXML
+    private TableView <Patient> patSearchTable;
+
+    @FXML
+    private TableColumn <Patient, String> patSearchID, patSearchName, patSearchLink;
+
+    @FXML
+    private TextField searchBar;
 
     private Parent root;
     private Scene scene;
@@ -64,6 +85,7 @@ public class LoggedStaffController {
 
         cont.setID(id);
         cont.setName(id);
+        cont.setDash(doc);
 
         window = (Stage) butt.getScene().getWindow();
         scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
@@ -90,7 +112,62 @@ public class LoggedStaffController {
     protected void setDash(DoctorDashboard doc) throws Exception {
         ArrayList<Appointment> app = doc.getAppointments();
 
+        ObservableList<Appointment> appoint = FXCollections.observableArrayList(app);
+        try  {
+            patNameCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("name"));
+            patDateCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
+            patTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("time"));
+            patAppointTable.setItems(appoint);
+        }
+        catch (NullPointerException e) {
 
+        }
+
+    }
+
+    @FXML
+    protected void setSearch(ObservableList<Patient> pat) throws Exception {
+
+        try  {
+            patSearchID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+            patSearchName.setCellValueFactory(new PropertyValueFactory<>("name"));
+            patSearchLink.setCellValueFactory(new PropertyValueFactory<>("link"));
+            patSearchTable.setItems(pat);
+
+            FilteredList<Patient> filteredData = new FilteredList<>(pat, b -> true);
+            searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredData.setPredicate(searchModel -> {
+                    if (newValue.isEmpty() || newValue == null || newValue.isBlank()) {
+                        return true;
+                    }
+
+                    String key = newValue.toLowerCase();
+
+                    if (searchModel.getName().toLowerCase().indexOf(key) > -1) {
+                        return true;
+                    }
+                    else if (Integer.toString(searchModel.getID()).indexOf(key) > -1) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                });
+            } );
+
+            SortedList<Patient> sort = new SortedList<>(filteredData);
+            sort.comparatorProperty().bind(patSearchTable.comparatorProperty());
+
+        }
+        catch (NullPointerException e) {
+
+        }
+
+    }
+
+    @FXML
+    protected void onSearch() {
+        ObservableList<Patient> pat = patSearchTable.getItems();
 
     }
 
@@ -137,10 +214,27 @@ public class LoggedStaffController {
 
     @FXML
     protected void onDocPatientClick() throws Exception {
-        changeScene(docPatients, "PatientSearch.fxml", this.getID());
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("PatientSearch.fxml"));
+        root = loader.load();
+
+        LoggedStaffController cont = loader.getController();
+
+        cont.setID(this.getID());
+
         Patient pat = new Patient();
         ArrayList<Patient> patList = pat.select(this.getID());
+        ObservableList<Patient> patTab = FXCollections.observableArrayList(patList);
+
+        cont.setSearch(patTab);
+
+        window = (Stage) docPatients.getScene().getWindow();
+        scene = new Scene(root, docPatients.getScene().getWidth(), docPatients.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
 
     }
+
 
 }

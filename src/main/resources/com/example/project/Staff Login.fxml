@@ -5,9 +5,12 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -21,18 +24,28 @@
                   <PasswordField fx:id="staffPassword" prefWidth="228.0" promptText="Password" />
                </children>
             </VBox>
-            <Button fx:id="staffLogin" layoutX="111.0" layoutY="397.0" mnemonicParsing="false" onAction="#onStaffLogin" prefHeight="38.0" prefWidth="85.0" style="-fx-background-radius: 10;" text="Login" textAlignment="CENTER">
+            <Button fx:id="staffLogin" layoutX="103.0" layoutY="397.0" mnemonicParsing="false" onAction="#onStaffLogin" prefHeight="38.0" prefWidth="85.0" style="-fx-background-radius: 10;" text="Login" textAlignment="CENTER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label alignment="CENTER" layoutX="61.0" layoutY="36.0" prefHeight="65.0" prefWidth="166.0" text="Staff Login" textAlignment="CENTER">
+            <Label alignment="CENTER" layoutX="61.0" layoutY="14.0" prefHeight="65.0" prefWidth="166.0" text="Staff Login" textAlignment="CENTER">
                <font>
                   <Font size="28.0" />
                </font>
             </Label>
-            <Hyperlink fx:id="backLogin" layoutX="88.0" layoutY="108.0" onAction="#onBackLogin" text="Back to patient login" underline="true" />
-            <Label fx:id="staffSignInLabel" alignment="CENTER" layoutX="28.0" layoutY="161.0" prefHeight="44.0" prefWidth="232.0" textAlignment="CENTER" textFill="#ff0101" wrapText="true" />
+            <Hyperlink fx:id="backLogin" layoutX="85.0" layoutY="80.0" onAction="#onBackLogin" text="Back to patient login" underline="true" />
+            <Label fx:id="staffSignInLabel" alignment="CENTER" layoutX="28.0" layoutY="117.0" prefHeight="44.0" prefWidth="232.0" textAlignment="CENTER" textFill="#ff0101" wrapText="true" />
+            <HBox alignment="CENTER" layoutX="31.0" layoutY="161.0" prefHeight="74.0" prefWidth="225.0" spacing="50.0">
+               <children>
+                  <RadioButton fx:id="doctorRadio" mnemonicParsing="false" text="Doctor">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="staff" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="nurseRadio" mnemonicParsing="false" text="Nurse" toggleGroup="$staff" />
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
    </center>

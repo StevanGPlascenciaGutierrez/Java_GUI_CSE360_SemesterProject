@@ -1,5 +1,8 @@
 package com.example.project;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,11 +24,12 @@ public class Patient {
     private double BMI;
     private String password;
     private Doctor currentDoctor;
+    private Hyperlink link;
 
     public Patient() {
     }
 
-    public Patient(String name, double weight, double height, int ID, String email, String birthday, String address, int phoneNum, int age, double BMI, String password, Doctor currentDoctor) {
+    public Patient(String name, double weight, double height, int ID, String email, String birthday, String address, int phoneNum, int age, double BMI, String password, Doctor currentDoctor, Hyperlink link) {
         this.name = name;
         this.weight = weight;
         this.height = height;
@@ -38,6 +42,7 @@ public class Patient {
         this.BMI = BMI;
         this.password = password;
         this.currentDoctor = currentDoctor;
+        this.link = link;
     }
 
     public boolean isDependent()
@@ -48,6 +53,15 @@ public class Patient {
         }
         return false;
     }
+
+    public Hyperlink getLink() {
+        return link;
+    }
+
+    public void setLink(Hyperlink link) {
+        this.link = link;
+    }
+
     public String getName() {
         return name;
     }
@@ -159,7 +173,7 @@ public class Patient {
     }
 
     public ArrayList<Patient> select(int id) {
-        String sql = "SELECT * FROM Patient WHERE doctorID = ?)";
+        String sql = "SELECT * FROM Patient WHERE currentDoctor = ?";
         ArrayList<Patient> patList = new ArrayList<Patient>();
 
         try {
@@ -171,6 +185,9 @@ public class Patient {
                 Patient pat = new Patient();
                 pat.setID(rs.getInt("patientID"));
                 pat.setName(rs.getString("name"));
+                Hyperlink hyper = new Hyperlink();
+                hyper.setText("more details");
+                pat.setLink(hyper);
                 patList.add(pat);
             }
 

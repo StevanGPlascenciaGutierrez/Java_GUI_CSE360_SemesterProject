@@ -51,7 +51,7 @@ public class VisitSummary {
     }
     public void setVisitNum(int visitNum){this.visitNum = visitNum;}
 
-    public static ArrayList<VisitSummary> selectVisitSummary(int patientID){
+    public ArrayList<VisitSummary> selectVisitSummary(int patientID){
         String sql = "SELECT visitNumber, date, doctorNote "
                 + "FROM VisitSummary WHERE patientID = ?";
 
@@ -82,7 +82,7 @@ public class VisitSummary {
         return visits;
     }
 
-    public static Vitals selectVitals(int visitNum)
+    public Vitals selectVitals(int visitNum)
     {
         String sql = "SELECT heartRate, temperature, bloodPressure,respRate "
                 + "FROM VITALS WHERE visitNumber = ?";
@@ -104,7 +104,7 @@ public class VisitSummary {
         return null;
     }
 
-    public static ArrayList<HealthIssues> selectHealth(int visitNum)
+    public ArrayList<HealthIssues> selectHealth(int visitNum)
     {
         String sql = "SELECT description, name, date "
                 + "FROM HEALTHISSUE WHERE visitNumber = ?";

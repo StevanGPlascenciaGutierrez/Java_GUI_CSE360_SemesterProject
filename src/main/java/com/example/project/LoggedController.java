@@ -1,5 +1,7 @@
 package com.example.project;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,7 +18,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +28,7 @@ import java.util.logging.Logger;
 public class LoggedController {
 
     @FXML
-    Label nameLabel, patPhone, patName, patEmail, patAddress, patDoctor, insName, insPhone, insID, insAddress;
+    Label patAppLabel, nameLabel, patPhone, patName, patEmail, patAddress, patDoctor, insName, insPhone, insID, insAddress;
 
     @FXML
     Label pharmName, pharmAddress, pharmPhone;
@@ -32,9 +36,22 @@ public class LoggedController {
     @FXML
     private Hyperlink backPatDash;
     @FXML
-    private Button submitNewInsurance, submitNewPatient, logoutButton, toMessages, visitSumButt, patHealthHistClick, prescriptionClick;
+    private Button appButt, patAppSubmit, submitNewInsurance, submitNewPatient, logoutButton, toMessages, visitSumButt, patHealthHistClick, prescriptionClick;
 
+    @FXML
+    private TableView<Immunization> patImmune;
 
+    @FXML
+    private TableColumn<Immunization, String> patVaccine, patVaccDate, patDescription;
+
+    @FXML
+    private ChoiceBox<String> visitDate, patAppDoc, patAppTime;
+
+    @FXML
+    private DatePicker patAppDate;
+
+    @FXML
+    private TextArea patDocDesc;
 
     private Parent root;
     private Scene scene;
@@ -100,6 +117,17 @@ public class LoggedController {
         pharmAddress.setText(pharm.getAddress());
         pharmPhone.setText(Integer.toString(pharm.getPhoneNumber()));
 
+        ObservableList<Immunization> immune = FXCollections.observableArrayList(imm);
+        try  {
+            patVaccine.setCellValueFactory(new PropertyValueFactory<Immunization, String>("type"));
+            patVaccDate.setCellValueFactory(new PropertyValueFactory<Immunization, String>("date"));
+            patDescription.setCellValueFactory(new PropertyValueFactory<Immunization, String>("description"));
+            patImmune.setItems(immune);
+        }
+        catch (NullPointerException e) {
+
+        }
+
     }
 
 
@@ -132,12 +160,45 @@ public class LoggedController {
     @FXML
     protected void onVisitClick() throws Exception{
         changeScene(visitSumButt, "Visit Summary.fxml", this.getID());
-        VisitSummary.selectVisitSummary(this.getID());
+        VisitSummary visit = new VisitSummary();
+        ArrayList<VisitSummary> visitArr;
+        visitArr = visit.selectVisitSummary(this.getID());
+        ArrayList<String> dateArr = new ArrayList<String>();
+
+        for (VisitSummary vis : visitArr) {
+            dateArr.add(vis.getDate());
+        }
+
+        ObservableList<String> dateList = FXCollections.observableArrayList(dateArr);
+
+        visitDate.setItems(dateList);
     }
 
     @FXML
     protected void onAppButtClick() throws Exception{
-        changeScene(toMessages, "PatientAppointment.fxml", this.getID());
+        changeScene(appButt, "PatientAppointment.fxml", this.getID());
+    }
+
+    @FXML
+    protected void onAppointmentSub() throws Exception {
+        Appointment app = new Appointment();
+        LocalDate today = LocalDate.now();
+        LocalDate appointDate = patAppDate.getValue();
+
+        if (appointDate != null && !appointDate.isBefore(today)) {
+            try {
+                String doc = patAppDoc.toString();
+                String docDesc = patDocDesc.getText();
+                app.insert(patAppTime.toString(), patAppDate.toString() ,1, this.getID(), 1);
+                changeScene(patAppSubmit, "Patient Dashboard.fxml", this.getID());
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        else {
+            patAppLabel.setText("Please enter a valid date");
+        }
     }
 
     @FXML

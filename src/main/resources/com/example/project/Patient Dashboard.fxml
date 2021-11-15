@@ -163,14 +163,14 @@
                <children>
                   <BorderPane prefHeight="407.0" prefWidth="764.0" style="-fx-border-color: black;">
                      <top>
-                        <ToolBar fx:id="patImmune" prefHeight="27.0" prefWidth="755.0" style="-fx-spacing: 400; -fx-alignment: center;" BorderPane.alignment="CENTER">
+                        <ToolBar prefHeight="27.0" prefWidth="755.0" style="-fx-spacing: 400; -fx-alignment: center;" BorderPane.alignment="CENTER">
                            <items>
                               <Label alignment="CENTER" prefHeight="19.0" prefWidth="159.0" style="-fx-border-color: black;" text="Immunization History" textAlignment="CENTER" />
                            </items>
                         </ToolBar>
                      </top>
                      <center>
-                        <TableView prefHeight="300.0" prefWidth="562.0" BorderPane.alignment="CENTER">
+                        <TableView fx:id="patImmune" prefHeight="300.0" prefWidth="562.0" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="patVaccine" prefWidth="75.0" text="Vaccine" />
                               <TableColumn fx:id="patVaccDate" prefWidth="75.0" text="Date" />

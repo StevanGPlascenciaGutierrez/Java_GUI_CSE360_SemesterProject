@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -29,7 +30,7 @@ public class LogInController {
     private PasswordField patientPassword, staffPassword, signUpPassword;
 
     @FXML
-    private Label signInLabel, staffSignInLabel, signUpLabel;
+    private Label signInLabel, staffSignInLabel, signUpLabel, patAppLabel, insuranceWarning, pharmacyWarning;
 
     @FXML
     private DatePicker signUpBday, choiceDate;
@@ -39,6 +40,9 @@ public class LogInController {
 
     @FXML
     private TextArea doctorInfo;
+
+    @FXML
+    private RadioButton doctorRadio, nurseRadio;
 
     private Parent root;
     private Scene scene;
@@ -87,6 +91,7 @@ public class LogInController {
         Stage box = new Stage();
         scene = new Scene(root);
         box.initModality(Modality.APPLICATION_MODAL);
+        box.initStyle(StageStyle.UNDECORATED);
         box.setResizable(false);
         box.setScene(scene);
         box.showAndWait();
@@ -112,24 +117,36 @@ public class LogInController {
 
     @FXML
     protected void onStaffLogin() throws Exception{
+
         if (staffID.getText().isBlank() || staffPassword.getText().isBlank()) {
             staffSignInLabel.setText("Please enter an email and password");
         }
         else {
-            int m;
-            try {
-                m = Connect.loginStaff(Integer.parseInt(staffID.getText()), staffPassword.getText());
-                if (m == -1) {
-                    staffSignInLabel.setText("ID or password is incorrect");
+
+            if (doctorRadio.isSelected()) {
+                int m;
+                try {
+                    m = Connect.loginStaff(Integer.parseInt(staffID.getText()), staffPassword.getText());
+                    if (m == -1) {
+                        staffSignInLabel.setText("ID or password is incorrect");
+                    }
+                    else {
+                        DoctorDashboard doc = new DoctorDashboard();
+                        doc.select(m);
+                        staffLoginEvent(staffLogin, "DoctorDashboard.fxml", m, doc);
+                    }
                 }
-                else {
-                    DoctorDashboard doc = new DoctorDashboard();
-                    doc.select(m);
-                    staffLoginEvent(staffLogin, "DoctorDashboard.fxml", m, doc);
+                catch (NumberFormatException e) {
+                    staffSignInLabel.setText("Please enter an integer for the ID");
                 }
             }
-            catch (NumberFormatException e) {
-                staffSignInLabel.setText("Please enter an integer for the ID");
+
+            else if (nurseRadio.isSelected()) {
+
+            }
+
+            else {
+                staffSignInLabel.setText("Please choose staff type");
             }
 
         }
@@ -152,19 +169,37 @@ public class LogInController {
     @FXML
     protected void onEnterAppointment() throws Exception {
         Stage box = (Stage) firstAppointment.getScene().getWindow();
-        box.close();
+        Appointment app = new Appointment();
+        try {
+            app.insert(choiceTime.toString(), choiceDate.toString(), Integer.valueOf(doctorChoice.toString()), 1, 1);
+            box.close();
+        }
+        catch (Exception e) {
+            patAppLabel.setText("Please enter valid entries for each field");
+        }
     }
 
     @FXML
     protected void onEnterInsurance() throws Exception {
         Stage box = (Stage) submitInsurance.getScene().getWindow();
-        box.close();
+        try {
+            box.close();
+        }
+        catch (Exception e) {
+            insuranceWarning.setText("Please enter valid entries for each field");
+        }
+
     }
 
     @FXML
     protected void onEnterPharmacy() throws Exception {
         Stage box = (Stage) submitPharmacy.getScene().getWindow();
-        box.close();
+        try {
+            box.close();
+        }
+        catch (Exception e) {
+            pharmacyWarning.setText("Please enter valid entries for each field");
+        }
     }
 
     @FXML
@@ -181,11 +216,8 @@ public class LogInController {
                         signUpPassword.getText(), signUpAddress.getText(), Long.parseLong(signUpPhone.getText()));
 
                 popup("firstAppointment");
-                Appointment app = new Appointment();
-                app.insert(choiceTime.toString(), choiceDate.toString(), Integer.valueOf(doctorChoice.toString()), 1, 1);
 
                 popup("insurance");
-
 
                 popup("pharmacy");
 

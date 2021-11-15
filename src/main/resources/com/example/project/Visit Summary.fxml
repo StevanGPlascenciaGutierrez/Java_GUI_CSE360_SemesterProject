@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -21,7 +21,7 @@
          <items>
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="275.0" spacing="10.0" style="-fx-border-color: black;">
                <children>
-                  <DatePicker />
+                  <ChoiceBox fx:id="visitDate" prefWidth="150.0" />
                   <Label text="Visit Summary" />
                </children>
             </HBox>
