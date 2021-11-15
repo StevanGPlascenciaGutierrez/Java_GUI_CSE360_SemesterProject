@@ -1,5 +1,9 @@
 package com.example.project;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class HealthIssues {
     private String name;
     private String description;
