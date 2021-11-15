@@ -67,10 +67,10 @@
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Height" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Weight" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="BMI" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" />
                               <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="visitorName" alignment="CENTER" prefHeight="18.0" prefWidth="151.0" textAlignment="CENTER" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                      </children>

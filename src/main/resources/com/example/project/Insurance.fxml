@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.LogInController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.SignUpController">
    <top>
       <ToolBar prefHeight="40.0" prefWidth="542.0" style="-fx-spacing: 400; -fx-alignment: center; -fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
          <items>
@@ -46,11 +46,11 @@
                         <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Insurance Name" textAlignment="CENTER" wrapText="true" />
                         <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Address" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
                         <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Phone Number" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
-                        <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="138.0" promptText="Enter new insurance" GridPane.columnIndex="1" />
-                        <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="138.0" promptText="Enter new address" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="138.0" promptText="Enter new phone number" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="firstInsName" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="138.0" promptText="Enter new insurance" GridPane.columnIndex="1" />
+                        <TextField fx:id="firstInsAddress" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="138.0" promptText="Enter new address" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="firstInsPhone" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="138.0" promptText="Enter new phone number" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Member ID" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
-                        <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="138.0" promptText="Enter new member ID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="firstInsMemberID" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="138.0" promptText="Enter new member ID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                   <Button fx:id="submitInsurance" mnemonicParsing="false" onAction="#onEnterInsurance" prefHeight="33.0" prefWidth="106.0" text="Submit" textAlignment="CENTER" wrapText="true">

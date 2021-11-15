@@ -21,25 +21,16 @@ public class LogInController {
     @FXML
     private Hyperlink signUp, backLogin, doctorLogin;
     @FXML
-    private Button patientSignUp, loginButton, staffLogin, firstAppointment, submitInsurance, submitPharmacy;
+    private Button loginButton, staffLogin;
 
     @FXML
-    private TextField patientEmail, staffID, signUpFirst, signUpLast, signUpEmail, signUpPhone, signUpAddress;
+    private TextField patientEmail, staffID;
 
     @FXML
-    private PasswordField patientPassword, staffPassword, signUpPassword;
+    private PasswordField patientPassword, staffPassword;
 
     @FXML
-    private Label signInLabel, staffSignInLabel, signUpLabel, patAppLabel, insuranceWarning, pharmacyWarning;
-
-    @FXML
-    private DatePicker signUpBday, choiceDate;
-
-    @FXML
-    private ComboBox doctorChoice, choiceTime;
-
-    @FXML
-    private TextArea doctorInfo;
+    private Label signInLabel, staffSignInLabel;
 
     @FXML
     private RadioButton doctorRadio, nurseRadio;
@@ -84,17 +75,6 @@ public class LogInController {
         Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
         window.setScene(scene);
         window.show();
-    }
-
-    public void popup (String file) throws IOException {
-        Parent root = FXMLLoader.load(Project.class.getResource(file));
-        Stage box = new Stage();
-        scene = new Scene(root);
-        box.initModality(Modality.APPLICATION_MODAL);
-        box.initStyle(StageStyle.UNDECORATED);
-        box.setResizable(false);
-        box.setScene(scene);
-        box.showAndWait();
     }
 
     public void staffLoginEvent (Button butt,String file, int id, DoctorDashboard doc) throws Exception {
@@ -166,70 +146,7 @@ public class LogInController {
         loadFX(backLogin, "login.fxml");
     }
 
-    @FXML
-    protected void onEnterAppointment() throws Exception {
-        Stage box = (Stage) firstAppointment.getScene().getWindow();
-        Appointment app = new Appointment();
-        try {
-            app.insert(choiceTime.toString(), choiceDate.toString(), Integer.valueOf(doctorChoice.toString()), 1, 1);
-            box.close();
-        }
-        catch (Exception e) {
-            patAppLabel.setText("Please enter valid entries for each field");
-        }
-    }
 
-    @FXML
-    protected void onEnterInsurance() throws Exception {
-        Stage box = (Stage) submitInsurance.getScene().getWindow();
-        try {
-            box.close();
-        }
-        catch (Exception e) {
-            insuranceWarning.setText("Please enter valid entries for each field");
-        }
-
-    }
-
-    @FXML
-    protected void onEnterPharmacy() throws Exception {
-        Stage box = (Stage) submitPharmacy.getScene().getWindow();
-        try {
-            box.close();
-        }
-        catch (Exception e) {
-            pharmacyWarning.setText("Please enter valid entries for each field");
-        }
-    }
-
-    @FXML
-    protected void onPatientSignUp() throws Exception {
-        try {
-            if (signUpFirst.getText().isBlank() || signUpLast.getText().isBlank() ||
-                    signUpEmail.getText().isBlank() || signUpPassword.getText().isBlank() ||
-                    signUpBday.getValue().toString().isBlank() || signUpAddress.getText().isBlank() || signUpPhone.getText().isBlank()) {
-                signUpLabel.setText("Please enter valid entries for each field");
-            }
-            else {
-
-                Connect.signUp(signUpFirst.getText(), signUpLast.getText(), signUpBday.getValue().toString(), signUpEmail.getText(),
-                        signUpPassword.getText(), signUpAddress.getText(), Long.parseLong(signUpPhone.getText()));
-
-                popup("firstAppointment");
-
-                popup("insurance");
-
-                popup("pharmacy");
-
-                loadFX(patientSignUp, "login.fxml");
-
-            }
-        }
-        catch (NullPointerException e){
-            signUpLabel.setText("Please enter a valid birthday");
-        }
-
-    }
 
     @FXML
     protected void onLogin() throws Exception {

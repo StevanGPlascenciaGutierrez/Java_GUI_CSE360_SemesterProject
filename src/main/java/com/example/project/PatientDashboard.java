@@ -62,7 +62,7 @@ public class PatientDashboard extends Dashboard {
             PreparedStatement pstmt = conn.prepareStatement(insSQL);
             pstmt.setInt(1, patientID);
             ResultSet rs = pstmt.executeQuery();
-            insurance = new Insurance(rs.getString("name"),rs.getInt("phoneNumber"));
+            insurance = new Insurance(rs.getString("name"),rs.getInt("phoneNumber"), "fill", 1);
 
 
             //Gets Pharmacy from database

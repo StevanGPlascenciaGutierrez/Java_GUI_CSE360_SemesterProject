@@ -1,5 +1,11 @@
 package com.example.project;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import static com.example.project.Connect.conn;
+
 public class Pharmacy {
 
     private String name;
@@ -31,12 +37,27 @@ public class Pharmacy {
         this.name = name;
     }
 
-    public void setPhoneNumber(String Address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public void setDescription(Integer phoneNumber){
+    public void setPhoneNumber(Integer phoneNumber){
         this.phoneNumber = phoneNumber;
+    }
+
+    public void insert(Pharmacy pharm, int id){
+        String sql = "INSERT INTO Pharamacy(name, address, phoneNumber, patientID) VALUES(?,?,?,?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, pharm.getName());
+            pstmt.setString(2, pharm.getAddress());
+            pstmt.setInt(3, pharm.getPhoneNumber());
+            pstmt.setInt(4, id);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }
