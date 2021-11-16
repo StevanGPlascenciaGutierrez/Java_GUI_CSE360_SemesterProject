@@ -1,5 +1,7 @@
 package com.example.project;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static com.example.project.Connect.conn;
@@ -39,7 +42,10 @@ public class SignUpController {
     private DatePicker signUpBday, choiceDate;
 
     @FXML
-    private ComboBox doctorChoice, choiceTime;
+    private ChoiceBox<String> choiceTime;
+
+    @FXML
+    private ChoiceBox<String> doctorChoice;
 
     @FXML
     private TextArea doctorInfo;
@@ -71,6 +77,48 @@ public class SignUpController {
         box.showAndWait();
     }
 
+    public void popupApp (String file) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource(file));
+        Parent root = loader.load();
+
+        SignUpController appSet = loader.getController();
+        appSet.populateAppointment();
+
+        Stage box = new Stage();
+        scene = new Scene(root);
+        box.initModality(Modality.APPLICATION_MODAL);
+        box.initStyle(StageStyle.UNDECORATED);
+        box.setResizable(false);
+        box.setScene(scene);
+        box.showAndWait();
+    }
+
+    @FXML
+    public void populateAppointment() {
+        ArrayList<Doctor> doc = new ArrayList<>();
+        ArrayList<String> docName = new ArrayList<>();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Doctor");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                doc.add(new Doctor(rs.getString("name"), rs.getInt("doctorID"), rs.getString("password")));
+                docName.add(rs.getString("name"));
+            }
+
+            ObservableList<String> docList = FXCollections.observableArrayList(docName);
+            doctorChoice.setItems(docList);
+
+        }
+        catch (Exception e) {
+
+        }
+
+
+
+    }
+
     @FXML
     protected void onBackLogin() throws Exception{
         root = FXMLLoader.load(Project.class.getResource("login.fxml"));
@@ -80,15 +128,23 @@ public class SignUpController {
         window.show();
     }
 
+
+
     @FXML
     protected void onEnterAppointment() throws Exception {
         Stage box = (Stage) firstAppointment.getScene().getWindow();
         Appointment app = new Appointment();
         try {
+            LocalDate now = LocalDate.now();
+            if (choiceDate.getValue().isAfter(now)) {
+                app.insert(choiceTime.getValue().toString(), choiceDate.getValue().toString(), Integer.valueOf(doctorChoice.getValue().toString()), this.getID(), 1);
 
-            app.insert(choiceTime.toString(), choiceDate.toString(), Integer.valueOf(doctorChoice.toString()), this.getID(), 1);
+                box.close();
+            }
 
-            box.close();
+            else {
+                patAppLabel.setText("Please enter a future date");
+            }
         }
         catch (Exception e) {
             patAppLabel.setText("Please enter valid entries for each field");
@@ -146,16 +202,15 @@ public class SignUpController {
                 Connect.signUp(signUpFirst.getText(), signUpLast.getText(), signUpBday.getValue().toString(), signUpEmail.getText(),
                         signUpPassword.getText(), signUpAddress.getText(), Long.parseLong(signUpPhone.getText()));
 
-                String sql = "SELECT emailAddress, password, patientID FROM Patient WHERE emailAddress = ?";
 
                 int m = Connect.loginPatient(signUpEmail.getText(), signUpPassword.getText());
                 this.setID(m);
 
-                popup("firstAppointment");
+                popupApp("firstAppointment.fxml");
 
-                popup("insurance");
+                popup("insurance.fxml");
 
-                popup("pharmacy");
+                popup("pharmacy.fxml");
 
                 root = FXMLLoader.load(Project.class.getResource("login.fxml"));
                 window = (Stage) patientSignUp.getScene().getWindow();

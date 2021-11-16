@@ -55,12 +55,14 @@ public class Insurance {
     }
 
     public void insert(Insurance ins, int id){
-        String sql = "INSERT INTO INSURANCE(name, phoneNumber, patientID) VALUES(?,?,?)";
+        String sql = "INSERT INTO INSURANCE(name, phoneNumber, patientID, memberID, description) VALUES(?,?,?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, ins.getName());
             pstmt.setInt(2, ins.getPhoneNumber());
             pstmt.setInt(3, id);
+            pstmt.setInt(4, ins.getMember());
+            pstmt.setString(5, ins.getAddress());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
