@@ -1,12 +1,18 @@
 package com.example.project;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import static com.example.project.Connect.conn;
 
 public class Nurse {
     private String name;
     private int staffID;
     private String password;
     private Doctor doctor;
+    private int doctorID;
 
 
     public Nurse() {
@@ -53,6 +59,35 @@ public class Nurse {
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    public int getDoctorID() {
+        return doctorID;
+    }
+
+    public void setDoctorID(int id) {
+        this.doctorID = id;
+    }
+
+    public Nurse getNurseObject(int id) throws SQLException {
+        String sql = "SELECT doctorID, nurseID, password, name FROM Nurse WHERE nurseID = ?";
+
+        Nurse nu = new Nurse();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            nu.setName(rs.getString("name"));
+            nu.setPassword(rs.getString("password"));
+            nu.setStaffID(rs.getInt("nurseID"));
+            nu.setDoctorID(rs.getInt("doctorID"));
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return nu;
     }
 
 }

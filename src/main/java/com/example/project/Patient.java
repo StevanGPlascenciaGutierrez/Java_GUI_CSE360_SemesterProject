@@ -255,4 +255,28 @@ public class Patient {
          return patList;
     }
 
+    public Patient getPatientObject(int id) throws SQLException {
+        String sql = "SELECT * FROM Doctor WHERE patientID = ?";
+
+        Patient pat = new Patient();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            pat.setName(rs.getString("name"));
+            pat.setPassword(rs.getString("password"));
+            pat.setID(id);
+            pat.setBirthday(rs.getString("birthday"));
+            pat.setEmail(rs.getString("emailAddress"));
+            pat.setPhoneNum(rs.getInt(Integer.parseInt(rs.getString("phoneNumber"))));
+            pat.setCurrentDoctor(new Doctor().getDoctorObject(rs.getInt(Integer.parseInt("currentDoctor"))));
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return pat;
+    }
+
 }

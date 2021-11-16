@@ -2,6 +2,7 @@ package com.example.project;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static com.example.project.Connect.conn;
@@ -76,6 +77,29 @@ public class Appointment {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public Appointment select(int id){
+        String sql = "SELECT * FROM APPOINTMENT WHERE doctorID = ?";
+        Appointment app = new Appointment();
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            app.setTime(rs.getString("time"));
+            app.setDate(rs.getString("date"));
+            app.setDoctor(new Doctor().getDoctorObject(rs.getInt("doctorID")));
+            app.setPatient(new Patient().getPatientObject(rs.getInt("patientID")));
+            app.setNurse(new Nurse().getNurseObject(rs.getInt("nurseID")));
+
+            return app;
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
 }

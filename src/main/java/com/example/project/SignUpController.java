@@ -85,6 +85,7 @@ public class SignUpController {
         Stage box = (Stage) firstAppointment.getScene().getWindow();
         Appointment app = new Appointment();
         try {
+
             app.insert(choiceTime.toString(), choiceDate.toString(), Integer.valueOf(doctorChoice.toString()), this.getID(), 1);
 
             box.close();

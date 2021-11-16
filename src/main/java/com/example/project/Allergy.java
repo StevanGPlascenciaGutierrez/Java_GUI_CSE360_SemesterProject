@@ -34,12 +34,13 @@ public class Allergy {
         this.description = newDescription;
     }
 
-    public static void insert(String type, String description){
-        String sql = "INSERT INTO ALLERGY(type, description) VALUES(?,?)";
+    public static void insert(Allergy all, int id){
+        String sql = "INSERT INTO ALLERGY(type, description, patientID) VALUES(?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, type);
-            pstmt.setString(2, description);
+            pstmt.setString(1, all.getType());
+            pstmt.setString(2, all.getDescription());
+            pstmt.setInt(3, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

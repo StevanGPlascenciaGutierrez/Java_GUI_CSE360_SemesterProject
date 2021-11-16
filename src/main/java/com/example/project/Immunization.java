@@ -45,13 +45,14 @@ public class Immunization {
         this.description = newDescription;
     }
 
-    public static void insert(String type, String date, String description){
-        String sql = "INSERT INTO IMMUNIZATION(type, date, description) VALUES(?,?,?)";
+    public static void insert(Immunization imm, int id){
+        String sql = "INSERT INTO IMMUNIZATION(type, date, description, patientID) VALUES(?,?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, type);
-            pstmt.setString(2, date);
-            pstmt.setString(3, description);
+            pstmt.setString(1, imm.getType());
+            pstmt.setString(2, imm.getDate());
+            pstmt.setString(3, imm.getDescription());
+            pstmt.setInt(4, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

@@ -31,12 +31,15 @@ public class LoggedController {
     Label patAppLabel, nameLabel, patPhone, patName, patEmail, patAddress, patDoctor, insName, insPhone, insID, insAddress;
 
     @FXML
-    Label pharmName, pharmAddress, pharmPhone;
+    Label pharmName, pharmAddress, pharmPhone, immuneWarning;
 
     @FXML
-    private Hyperlink backPatDash;
+    private Hyperlink backPatDash, addNewImm;
     @FXML
     private Button appButt, patAppSubmit, submitNewInsurance, submitNewPatient, logoutButton, toMessages, visitSumButt, patHealthHistClick, prescriptionClick;
+
+    @FXML
+    private Button submitImm;
 
     @FXML
     private TableView<Immunization> patImmune;
@@ -48,10 +51,13 @@ public class LoggedController {
     private ChoiceBox<String> visitDate, patAppDoc, patAppTime;
 
     @FXML
-    private DatePicker patAppDate;
+    private DatePicker patAppDate, newImmDate;
 
     @FXML
     private TextArea patDocDesc;
+
+    @FXML
+    private TextField newImmName, newImmDesc;
 
     private Parent root;
     private Scene scene;
@@ -279,6 +285,45 @@ public class LoggedController {
         box.setScene(scene);
         box.showAndWait();
 
+    }
+
+    @FXML
+    protected void onNewImmunization() throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("Immunization.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        LoggedController cont = loader.getController();
+        cont.setID(this.getID());
+
+        Stage box = new Stage();
+        scene = new Scene(root);
+        box.initModality(Modality.APPLICATION_MODAL);
+        box.setResizable(false);
+        box.setScene(scene);
+        box.showAndWait();
+
+        PatientDashboard pat = new PatientDashboard();
+        pat.select(this.getID());
+        setDash(pat);
+
+    }
+
+    @FXML
+    protected void onSubmitNewImm() throws Exception {
+        Stage box = (Stage) submitImm.getScene().getWindow();
+        Immunization newImm = new Immunization();
+        newImm.setDate(newImmDate.getValue().toString());
+        newImm.setType(newImmName.getText());
+        newImm.setDescription(newImmDesc.getText());
+        Immunization.insert(newImm, this.getID());
+
+        box.close();
     }
 
 

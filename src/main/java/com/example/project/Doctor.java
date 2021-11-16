@@ -1,6 +1,11 @@
 package com.example.project;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import static com.example.project.Connect.conn;
 
 public class Doctor {
     private String name;
@@ -71,4 +76,25 @@ public class Doctor {
     {
         nurses.add(nurse);
     }
+
+    public Doctor getDoctorObject(int id) throws SQLException {
+        String sql = "SELECT doctorID, password, name FROM Doctor WHERE doctorID = ?";
+
+        Doctor doc = new Doctor();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            doc.setName(rs.getString("name"));
+            doc.setPassword(rs.getString("password"));
+            doc.setStaffID(rs.getInt("doctorID"));
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return doc;
+    }
+
 }
