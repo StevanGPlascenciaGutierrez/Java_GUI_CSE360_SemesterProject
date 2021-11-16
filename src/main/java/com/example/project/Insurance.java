@@ -43,4 +43,18 @@ public class Insurance {
             System.out.println(e.getMessage());
         }
     }
+    
+    public static void update(String name, int phoneNumber){
+        String sql = "UPDATE PATIENT SET name = ? " + "phone number = ? ";
+        
+        try(Connection conn = Connect.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+            
+            pstmt.setString(1, name);
+            pstmt.setInt(2, phoneNumber);
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
