@@ -177,7 +177,7 @@ public class SignUpController {
         try {
             Pharmacy pharm = new Pharmacy();
             pharm.setAddress(firstPharmAddress.getText());
-            pharm.setPhoneNumber(Integer.parseInt(firstInsPhone.getText()));
+            pharm.setPhoneNumber(Integer.parseInt(firstPharmPhone.getText()));
             pharm.setName(firstPharmacy.getText());
 
             pharm.insert(pharm, this.getID());

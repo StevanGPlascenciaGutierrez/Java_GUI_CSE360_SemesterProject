@@ -77,13 +77,12 @@ public class LoggedStaffController {
         Insurance ins;
 
         ins = pat.getInsurance();
-        imm = pat.getImmunizations();
         pharm = pat.getPharmacy();
 
         insName.setText(ins.getName());
         insPhone.setText(Integer.toString(ins.getPhoneNumber()));
-        insAddress.setText(ins.getName());
-        insID.setText(ins.getName());
+        insAddress.setText(ins.getAddress());
+        insID.setText(Integer.toString(ins.getMember()));
 
         pharmName.setText(pharm.getName());
         pharmAddress.setText(pharm.getAddress());
@@ -97,15 +96,18 @@ public class LoggedStaffController {
         patEmailLabel.setText(arr.get(3));
         patPhoneLabel.setText(arr.get(1));
 
-        ObservableList<Immunization> immune = FXCollections.observableArrayList(imm);
         try {
+            imm = pat.getImmunizations();
+            ObservableList<Immunization> immune = FXCollections.observableArrayList(imm);
             patVaccine.setCellValueFactory(new PropertyValueFactory<Immunization, String>("type"));
             patVaccDate.setCellValueFactory(new PropertyValueFactory<Immunization, String>("date"));
             patDescription.setCellValueFactory(new PropertyValueFactory<Immunization, String>("description"));
             patImmune.setItems(immune);
-        } catch (NullPointerException e) {
+        }
+        catch (Exception e) {
 
         }
+
     }
 
     protected void changeScene (Button butt,String file, int id) throws IOException, SQLException {

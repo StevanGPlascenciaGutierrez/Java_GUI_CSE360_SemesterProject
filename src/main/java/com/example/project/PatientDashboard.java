@@ -62,15 +62,20 @@ public class PatientDashboard extends Dashboard {
             PreparedStatement pstmt = conn.prepareStatement(insSQL);
             pstmt.setInt(1, patientID);
             ResultSet rs = pstmt.executeQuery();
-            insurance = new Insurance(rs.getString("name"),rs.getInt("phoneNumber"), "fill", 1);
+            insurance = new Insurance(rs.getString("name"),rs.getInt("phoneNumber"), rs.getString("description"), rs.getInt("memberID"));
 
+            pstmt.close();
+            rs.close();
 
             //Gets Pharmacy from database
             pstmt = conn.prepareStatement(phaSQL);
             pstmt.setInt(1, patientID);
             rs = pstmt.executeQuery();
+
             pharmacy = new Pharmacy(rs.getString("name"),rs.getString("address"),rs.getInt("phoneNumber"));
 
+            pstmt.close();
+            rs.close();
 
             //Gets Immunizations from database
             pstmt = conn.prepareStatement(immSQL);
@@ -80,6 +85,9 @@ public class PatientDashboard extends Dashboard {
                 Immunization imm = new Immunization(rs.getString("type"), rs.getString("date"), rs.getString("description"));
                 immunizations.add(imm);
             }
+
+            pstmt.close();
+            rs.close();
 
             pat.setImmunizations(immunizations);
             pat.setInsurance(insurance);

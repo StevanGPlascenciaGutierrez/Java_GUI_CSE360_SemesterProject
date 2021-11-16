@@ -185,7 +185,8 @@ public class Patient {
         String sql = "DELETE FROM Patient WHERE patientID = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.executeQuery();
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -207,8 +208,6 @@ public class Patient {
                 Hyperlink hyper = new Hyperlink();
                 hyper.setText("more details");
 
-                PatientDashboard patDash = new PatientDashboard();
-                patDash.select(rs.getInt("patientID"));
 
                 hyper.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
@@ -226,7 +225,6 @@ public class Patient {
 
                         Stage box = new Stage();
                         Scene scene = new Scene(root);
-                        box.setUserData(pat);
 
                         PatientDashboard dash = new PatientDashboard();
                         dash.select(pat.getID());
@@ -277,6 +275,22 @@ public class Patient {
         }
 
         return pat;
+    }
+
+    public void update(Patient pat, int id){
+        String sql = "Update Patient Set name = ?, phoneNumber = ?, address = ?, emailAddress = ? WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, pat.getName());
+            pstmt.setInt(2, pat.getPhoneNum());
+            pstmt.setString(3, pat.getAddress());
+            pstmt.setString(4, pat.getEmail());
+            pstmt.setInt(5, id);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

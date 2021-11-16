@@ -59,6 +59,15 @@ public class LoggedController {
     @FXML
     private TextField newImmName, newImmDesc;
 
+    @FXML
+    private TextField editInsName, editInsMemberID, editInsAddress, editInsPhone;
+
+    @FXML
+    private TextField newFirst, newLast, newPhone, newAddress, newEmail;
+
+    @FXML
+    private Label insWarning, patWarning;
+
     private Parent root;
     private Scene scene;
     private Stage window;
@@ -85,6 +94,7 @@ public class LoggedController {
         LoggedController cont = loader.getController();
 
         cont.setID(id);
+        cont.setDoctorID(Connect.getPatientDoctor(id));
 
 
         Stage window = (Stage) butt.getScene().getWindow();
@@ -116,8 +126,8 @@ public class LoggedController {
 
         insName.setText(ins.getName());
         insPhone.setText(Integer.toString(ins.getPhoneNumber()));
-        insAddress.setText(ins.getName());
-        insID.setText(ins.getName());
+        insAddress.setText(ins.getAddress());
+        insID.setText(Integer.toString(ins.getMember()));
 
         pharmName.setText(pharm.getName());
         pharmAddress.setText(pharm.getAddress());
@@ -195,7 +205,7 @@ public class LoggedController {
             try {
                 String doc = patAppDoc.toString();
                 String docDesc = patDocDesc.getText();
-                app.insert(patAppTime.toString(), patAppDate.toString() ,1, this.getID(), 1);
+                app.insert(patAppTime.toString(), patAppDate.toString() ,this.getDoctorID(), this.getID(), 1);
                 changeScene(patAppSubmit, "Patient Dashboard.fxml", this.getID());
             }
             catch (Exception e) {
@@ -254,36 +264,99 @@ public class LoggedController {
     @FXML
     protected void onSubmitPatient() throws Exception {
         Stage box = (Stage) submitNewPatient.getScene().getWindow();
-        box.close();
+
+        Patient pat = new Patient();
+
+        try {
+            pat.setPhoneNum(Integer.parseInt(newPhone.getText()));
+            pat.setEmail(newEmail.getText());
+            pat.setAddress(newAddress.getText());
+            pat.setName(newFirst.getText() + " " + newLast.getText());
+
+            pat.update(pat, this.getID());
+
+            box.close();
+        }
+        catch (Exception e) {
+            patWarning.setText("Please enter valid entries for each field");
+        }
+
+
     }
 
     @FXML
     protected void onEditPatient() throws Exception {
-        Parent root = FXMLLoader.load(Project.class.getResource("EditPatient.fxml"));
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("EditPatient.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        LoggedController cont = loader.getController();
+        cont.setID(this.getID());
+
         Stage box = new Stage();
         scene = new Scene(root);
         box.initModality(Modality.APPLICATION_MODAL);
         box.setResizable(false);
         box.setScene(scene);
         box.showAndWait();
+
+        setName(this.getID());
 
     }
 
     @FXML
     protected void onSubmitInsurance() throws Exception {
         Stage box = (Stage) submitNewInsurance.getScene().getWindow();
-        box.close();
+
+        try {
+            Insurance ins = new Insurance();
+            ins.setAddress(editInsAddress.getText());
+            ins.setMember(Integer.parseInt(editInsMemberID.getText()));
+            ins.setPhoneNumber(Integer.parseInt(editInsPhone.getText()));
+            ins.setName(editInsName.getText());
+
+            ins.update(ins, this.getID());
+
+
+            box.close();
+        }
+        catch (Exception e) {
+            insWarning.setText("Please enter valid entries for each field");
+        }
+
     }
 
     @FXML
     protected void onEditInsurance() throws Exception {
-        Parent root = FXMLLoader.load(Project.class.getResource("EditInsurance.fxml"));
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("EditInsurance.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        LoggedController cont = loader.getController();
+        cont.setID(this.getID());
+
         Stage box = new Stage();
         scene = new Scene(root);
         box.initModality(Modality.APPLICATION_MODAL);
         box.setResizable(false);
         box.setScene(scene);
         box.showAndWait();
+
+        PatientDashboard pat = new PatientDashboard();
+        pat.select(this.getID());
+        setDash(pat);
 
     }
 

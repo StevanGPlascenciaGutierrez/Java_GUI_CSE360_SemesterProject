@@ -69,4 +69,20 @@ public class Insurance {
         }
     }
 
+    public void update(Insurance ins, int id){
+        String sql = "Update INSURANCE Set name = ?, phoneNumber = ?, memberID = ?, description = ? WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, ins.getName());
+            pstmt.setInt(2, ins.getPhoneNumber());
+            pstmt.setInt(3, ins.getMember());
+            pstmt.setString(4, ins.getAddress());
+            pstmt.setInt(5, id);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
