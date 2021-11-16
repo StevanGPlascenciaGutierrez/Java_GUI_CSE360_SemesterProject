@@ -55,5 +55,20 @@ public class Pharmacy {
             System.out.println(e.getMessage());
         }
     }
+    
+    public static void update(String name, String address, String phoneNumber){
+        String sql = "UPDATE PATIENT SET name = ? " + "address = ? " + "phone Number = ?";
+        
+        try(Connection conn = Connect.conn;
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+            
+            pstmt.setString(1, name);
+            pstmt.setString(2, address);
+            pstmt.setInt(3, phoneNumber);
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 }
