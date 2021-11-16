@@ -57,7 +57,7 @@ public class Pharmacy {
     }
     
     public static void update(String name, String address, String phoneNumber){
-        String sql = "UPDATE PATIENT SET name = ? " + "address = ? " + "phone Number = ?";
+        String sql = "UPDATE PATIENT SET name = ? " + "address = ? " + "phone number = ?";
         
         try(Connection conn = Connect.conn;
             PreparedStatement pstmt = conn.prepareStatement(sql)){
