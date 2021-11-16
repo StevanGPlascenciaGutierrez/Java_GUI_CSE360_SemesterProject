@@ -22,15 +22,12 @@ import static com.example.project.Connect.conn;
 
 public class Patient {
     private String name;
-    private double weight;
-    private double height;
     private int ID;
     private String email;
     private String birthday;
     private String address;
     private int phoneNum;
     private int age;
-    private double BMI;
     private String password;
     private Doctor currentDoctor;
     private Hyperlink link;
@@ -40,15 +37,12 @@ public class Patient {
 
     public Patient(String name, double weight, double height, int ID, String email, String birthday, String address, int phoneNum, int age, double BMI, String password, Doctor currentDoctor, Hyperlink link) {
         this.name = name;
-        this.weight = weight;
-        this.height = height;
         this.ID = ID;
         this.email = email;
         this.birthday = birthday;
         this.address = address;
         this.phoneNum = phoneNum;
         this.age = age;
-        this.BMI = BMI;
         this.password = password;
         this.currentDoctor = currentDoctor;
         this.link = link;
@@ -77,22 +71,6 @@ public class Patient {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
     }
 
     public int getID() {
@@ -141,14 +119,6 @@ public class Patient {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public double getBMI() {
-        return BMI;
-    }
-
-    public void setBMI(double BMI) {
-        this.BMI = BMI;
     }
 
     public String getPassword() {

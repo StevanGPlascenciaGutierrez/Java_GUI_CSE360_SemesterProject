@@ -11,18 +11,25 @@ public class VisitSummary {
     private String doctorNote;
     private ArrayList<HealthIssues> healthIssues;
     private int visitNum;
+    private double weight;
+    private double height;
+    private double BMI;
 
     public VisitSummary() {
         date = "";
         vitals = null;
         doctorNote = "";
         healthIssues = new ArrayList<>();
+
     }
-    public VisitSummary(String date, Vitals vitals, String doctorNote, ArrayList<HealthIssues> healthIssues) {
+    public VisitSummary(String date, Vitals vitals, String doctorNote, ArrayList<HealthIssues> healthIssues, double weight, double height, double BMI) {
         this.date = date;
         this.vitals = vitals;
         this.doctorNote = doctorNote;
         this.healthIssues = healthIssues;
+        this.weight = weight;
+        this.height = height;
+        this.BMI = BMI;
     }
     public String getDate() {
         return date;
@@ -50,9 +57,27 @@ public class VisitSummary {
         vitals = newVitals;
     }
     public void setVisitNum(int visitNum){this.visitNum = visitNum;}
+    public double getWeight() {
+        return weight;
+    }
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+    public double getHeight() {
+        return height;
+    }
+    public void setHeight(double height) {
+        this.height = height;
+    }
+    public double getBMI() {
+        return BMI;
+    }
+    public void setBMI(double BMI) {
+        this.BMI = BMI;
+    }
 
     public ArrayList<VisitSummary> selectVisitSummary(int patientID){
-        String sql = "SELECT visitNumber, date, doctorNote "
+        String sql = "SELECT visitNumber, date, doctorNote, weight, height "
                 + "FROM VisitSummary WHERE patientID = ?";
 
         ArrayList<VisitSummary> visits = new ArrayList<>();
@@ -74,6 +99,9 @@ public class VisitSummary {
                 newSummary.setDoctorNote(result.getString("doctorNote"));
                 newSummary.setVitals(selectVitals(newSummary.getVisitNum()));
                 newSummary.setHealthIssues(selectHealth(newSummary.getVisitNum()));
+                newSummary.setWeight(result.getDouble("weight"));
+                newSummary.setHeight(result.getDouble("height"));
+                newSummary.setBMI(result.getDouble("bmi"));
                 visits.add(newSummary);
             }
         } catch (SQLException e) {
