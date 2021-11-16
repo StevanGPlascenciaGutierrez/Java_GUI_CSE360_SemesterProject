@@ -102,4 +102,20 @@ public class Appointment {
         return null;
     }
 
+    //Gets Appointment time from Doctor name
+    public String selectByDName(String Dname){
+
+        //SQL Query
+        String sql = "SELECT time FROM APPOINTMENT WHERE doctorID = (SELECT doctorID FROM Doctor WHERE name = ?)";
+
+        try {//Gets Appointment Time
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, Dname);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.getString("time");
+        }
+        catch (SQLException e) {
+            return null;
+        }
+    }
 }

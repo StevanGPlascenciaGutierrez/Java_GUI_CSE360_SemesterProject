@@ -107,4 +107,22 @@ public class DoctorDashboard extends Dashboard {
             return null;
         }
     }
+
+    //Gets Doctor Dashboard from Nurse ID
+    public DoctorDashboard nurseSelect(int nurseID){
+
+        //SQL Query
+        String nurSQL = "SELECT doctorID FROM Nurse WHERE nurseID = ?";
+
+        try{//Returns Dashboard by getting the Nurse's Doctor
+            PreparedStatement pstmt = conn.prepareStatement(nurSQL);
+            pstmt.setInt(1,nurseID);
+            ResultSet rs = pstmt.executeQuery();
+            int doctorID = rs.getInt("doctorID");
+
+            return this.select(doctorID);
+        }catch(SQLException e){
+            return null;
+        }
+    }
 }
