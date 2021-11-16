@@ -223,6 +223,7 @@ public class Patient {
 
                         LoggedStaffController cont = loader.getController();
 
+                        cont.setID(pat.getID());
                         Stage box = new Stage();
                         Scene scene = new Scene(root);
 
@@ -238,6 +239,7 @@ public class Patient {
                         box.setResizable(false);
                         box.setScene(scene);
                         box.showAndWait();
+
                     }
                 });
 
@@ -286,6 +288,20 @@ public class Patient {
             pstmt.setString(3, pat.getAddress());
             pstmt.setString(4, pat.getEmail());
             pstmt.setInt(5, id);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateDoctor(int id, int doctor){
+        String sql = "Update Patient Set currentDoctor = ? WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, doctor);
+            pstmt.setInt(2, id);
+
             pstmt.executeUpdate();
 
         } catch (SQLException e) {

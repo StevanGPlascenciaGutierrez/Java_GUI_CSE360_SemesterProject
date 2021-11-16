@@ -62,7 +62,7 @@ public class Connect {
         }
     }
 
-    public static int loginStaff(int id, String pass){
+    public int loginStaff(int id, String pass){
         String sql = "SELECT doctorID, password FROM Doctor WHERE doctorID = ?";
 
         try {
@@ -74,6 +74,27 @@ public class Connect {
             if(id == doctorID){
                 if(pass.equals(password)){
                     return doctorID;
+                }
+            }
+            return -1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return -1;
+        }
+    }
+
+    public int loginNurse(int id, String pass){
+        String sql = "SELECT nurseID, password FROM Nurse WHERE nurseID = ?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,id);
+            ResultSet rs = stmt.executeQuery();
+            int nurseID = rs.getInt("nurseID");
+            String password = rs.getString("password");
+            if(id == nurseID){
+                if(pass.equals(password)){
+                    return nurseID;
                 }
             }
             return -1;

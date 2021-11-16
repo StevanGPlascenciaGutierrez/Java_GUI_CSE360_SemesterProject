@@ -62,6 +62,8 @@ public class LoggedStaffController {
 
     private int userID;
 
+    private boolean type;
+
     protected void setID(int id) {
         this.userID = id;
     }
@@ -144,7 +146,22 @@ public class LoggedStaffController {
 
     @FXML
     protected void setName(int id) throws SQLException {
-        String docSQL = "SELECT name FROM Doctor WHERE doctorID = (SELECT currentDoctor FROM Patient WHERE patientID = ?)";
+        String docSQL = "SELECT name FROM Doctor WHERE doctorID = ?";
+        String temp;
+        PreparedStatement stmt = conn.prepareStatement(docSQL);
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
+
+        temp = rs.getString("name");
+
+        rs.close();
+
+        nameLabel.setText(temp);
+    }
+
+    @FXML
+    protected void setNurseName(int id) throws SQLException {
+        String docSQL = "SELECT name FROM Nurse WHERE nurseID = ?";
         String temp;
         PreparedStatement stmt = conn.prepareStatement(docSQL);
         stmt.setInt(1, id);

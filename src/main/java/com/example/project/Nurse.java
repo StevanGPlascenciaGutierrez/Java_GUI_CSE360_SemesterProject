@@ -90,4 +90,21 @@ public class Nurse {
         return nu;
     }
 
+    public static int getNurseID(int id) throws SQLException {
+        String sql = "SELECT nurseID FROM Nurse WHERE doctorID = ?";
+
+        int nurse = -1;
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            nurse = rs.getInt("nurseID");
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return nurse;
+    }
+
 }

@@ -1,8 +1,12 @@
 package com.example.project;
 
+import javafx.beans.property.ReadOnlySetProperty;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static com.example.project.Connect.conn;
 
@@ -64,19 +68,42 @@ public class Prescription {
         this.dosage = newDosage;
     }
 
-    public static void insert(String name, String startDate, String endDate, String description, double dosage){
-        String sql = "INSERT INTO PRESCRIPTION(name, startDate, endDate, description, dosage) VALUES(?,?,?,?,?)";
+    public void insert(Prescription pre, int id){
+        String sql = "INSERT INTO PRESCRIPTION(name, startDate, endDate, description, dosage, patientID) VALUES(?,?,?,?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, name);
-            pstmt.setString(2, startDate);
-            pstmt.setString(3, endDate);
-            pstmt.setString(4, description);
-            pstmt.setDouble(5, dosage);
+            pstmt.setString(1, pre.getName());
+            pstmt.setString(2, pre.getStartDate());
+            pstmt.setString(3, pre.getEndDate());
+            pstmt.setString(4, pre.getDescription());
+            pstmt.setDouble(5, pre.getDosage());
+            pstmt.setInt(6, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+    }
+
+    public ArrayList<Prescription> select(int id) {
+        String sql = "SELECT * FROM PRESCRIPTION WHERE patientID = ?";
+        ArrayList<Prescription> arr = new ArrayList<>();
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                arr.add(new Prescription(rs.getString("name"), rs.getString("startDate"), rs.getString("endDate"), rs.getString("description"), rs.getDouble("dosage")));
+            }
+
+            return arr;
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
 }

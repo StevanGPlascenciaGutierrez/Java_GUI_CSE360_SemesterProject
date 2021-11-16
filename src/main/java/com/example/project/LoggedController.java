@@ -19,11 +19,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.example.project.Connect.conn;
 
 public class LoggedController {
 
@@ -48,7 +51,7 @@ public class LoggedController {
     private TableColumn<Immunization, String> patVaccine, patVaccDate, patDescription;
 
     @FXML
-    private ChoiceBox<String> visitDate, patAppDoc, patAppTime;
+    private ComboBox<String> visitDate, patAppDoc, patAppTime;
 
     @FXML
     private DatePicker patAppDate, newImmDate;
@@ -68,12 +71,46 @@ public class LoggedController {
     @FXML
     private Label insWarning, patWarning;
 
+    @FXML
+    private TableView<Prescription> prescriptionTable;
+
+    @FXML
+    private TableColumn<Prescription, String> preTableName, preTableFrom, preTableTo, preTableDosage, preTableDesc;
+
+    @FXML
+    private TextField newPreName, newPreDosage, newPreDesc;
+
+    @FXML
+    private DatePicker newPreStart, newPreEnd;
+
+    @FXML
+    private Button addNewPre, deletePre;
+
+    @FXML
+    private Label newPreWarning;
+
     private Parent root;
     private Scene scene;
     private Stage window;
 
     private int userID;
     private int userDoctor;
+
+    protected void setID(int id) {
+        this.userID = id;
+    }
+
+    protected int getID() {
+        return userID;
+    }
+
+    protected void setDoctorID(int id) {
+        this.userDoctor = id;
+    }
+
+    protected int getDoctorID() {
+        return userDoctor;
+    }
 
     @FXML
     public void loadFX(Button butt, String file) throws Exception {
@@ -146,31 +183,69 @@ public class LoggedController {
 
     }
 
-
-    protected void setID(int id) {
-        this.userID = id;
-    }
-
-    protected int getID() {
-        return userID;
-    }
-
-    protected void setDoctorID(int id) {
-        this.userDoctor = id;
-    }
-
-    protected int getDoctorID() {
-        return userDoctor;
-    }
-
     @FXML
     protected void onPatHealthClick() throws Exception{
         changeScene(patHealthHistClick, "Patient Health History.fxml", this.getID());
     }
 
     @FXML
+    protected void onNewPrescription() {
+        Prescription pre = new Prescription();
+        try {
+            pre.setName(newPreName.getText());
+            pre.setStartDate(newPreStart.getValue().toString());
+            pre.setEndDate(newPreEnd.getValue().toString());
+            pre.setDosage(Double.parseDouble(newPreDosage.getText()));
+            pre.setDescription(newPreDesc.getText());
+            pre.insert(pre, this.getID());
+
+            ArrayList<Prescription> preList = pre.select(this.getID());
+            this.setPrescriptions(preList);
+
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            newPreWarning.setText("Please enter valid entries for every field");
+        }
+
+    }
+
+    @FXML
+    protected void setPrescriptions(ArrayList<Prescription> preList) throws Exception {
+
+        ObservableList<Prescription> temp = FXCollections.observableArrayList(preList);
+
+        try {
+            preTableName.setCellValueFactory(new PropertyValueFactory<>("name"));
+            preTableFrom.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+            preTableTo.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+            preTableDosage.setCellValueFactory(new PropertyValueFactory<>("dosage"));
+            preTableDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
+            prescriptionTable.setItems(temp);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @FXML
     protected void onPreClick() throws Exception{
-        changeScene(prescriptionClick, "PrescriptionHistory.fxml", this.getID());
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("PrescriptionHistory.fxml"));
+        root = loader.load();
+
+        LoggedController cont = loader.getController();
+
+        cont.setID(this.getID());
+
+        Prescription pre = new Prescription();
+        ArrayList<Prescription> preList = pre.select(this.getID());
+        cont.setPrescriptions(preList);
+
+        window = (Stage) prescriptionClick.getScene().getWindow();
+        scene = new Scene(root, prescriptionClick.getScene().getWidth(), prescriptionClick.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
     }
 
     @FXML
@@ -188,33 +263,6 @@ public class LoggedController {
         ObservableList<String> dateList = FXCollections.observableArrayList(dateArr);
 
         visitDate.setItems(dateList);
-    }
-
-    @FXML
-    protected void onAppButtClick() throws Exception{
-        changeScene(appButt, "PatientAppointment.fxml", this.getID());
-    }
-
-    @FXML
-    protected void onAppointmentSub() throws Exception {
-        Appointment app = new Appointment();
-        LocalDate today = LocalDate.now();
-        LocalDate appointDate = patAppDate.getValue();
-
-        if (appointDate != null && !appointDate.isBefore(today)) {
-            try {
-                String doc = patAppDoc.toString();
-                String docDesc = patDocDesc.getText();
-                app.insert(patAppTime.toString(), patAppDate.toString() ,this.getDoctorID(), this.getID(), 1);
-                changeScene(patAppSubmit, "Patient Dashboard.fxml", this.getID());
-            }
-            catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        else {
-            patAppLabel.setText("Please enter a valid date");
-        }
     }
 
     @FXML
@@ -280,7 +328,6 @@ public class LoggedController {
         catch (Exception e) {
             patWarning.setText("Please enter valid entries for each field");
         }
-
 
     }
 
@@ -399,5 +446,99 @@ public class LoggedController {
         box.close();
     }
 
+    @FXML
+    public void onAppComboChange() throws Exception {
+        ArrayList<String> times = new ArrayList<>();
+        times.add(LocalTime.of(8, 0).toString());
+        times.add(LocalTime.of(10, 0).toString());
+        times.add(LocalTime.of(12, 0).toString());
+        times.add(LocalTime.of(14, 0).toString());
+        times.add(LocalTime.of(16, 0).toString());
 
+
+
+        Appointment app = new Appointment();
+        try {
+            ArrayList<String> timeList = app.selectByDName(patAppDoc.getValue(), patAppDate.getValue().toString());
+
+            for (int i = 0; i < times.size(); i++) {
+                for (int j = 0; j < timeList.size(); j++) {
+                    if (times.get(i).equals(timeList.get(j))) {
+                        times.remove(i); //removes equal elements to only populate times that doctor doesnt have
+                    }
+                }
+            }
+
+            patAppTime.getItems().setAll(times);
+        }
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    @FXML
+    public void populateAppointment() {
+        ArrayList<Doctor> doc = new ArrayList<>();
+        ArrayList<String> docName = new ArrayList<>();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Doctor");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                doc.add(new Doctor(rs.getString("name"), rs.getInt("doctorID"), rs.getString("password")));
+                docName.add(rs.getString("name"));
+            }
+
+            ObservableList<String> docList = FXCollections.observableArrayList(docName);
+            patAppDoc.setItems(docList);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void onAppointmentSub() throws Exception {
+        Appointment app = new Appointment();
+        LocalDate today = LocalDate.now();
+        LocalDate appointDate = patAppDate.getValue();
+
+        try {
+            LocalDate now = LocalDate.now();
+            if (patAppDate.getValue().isAfter(now)) {
+                int doctorID = Doctor.getDoctorID(patAppDoc.getValue());
+                app.insert(patAppTime.getValue().toString(), patAppDate.getValue().toString(), doctorID, this.getID(), Nurse.getNurseID(doctorID));
+                Patient pat = new Patient();
+                pat.updateDoctor(this.getID(), doctorID);
+
+                changeScene(patAppSubmit, "PatientDashboard.fxml", this.getID());
+            }
+
+            else {
+                patAppLabel.setText("Please enter valid entries for each field");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void onAppButtClick() throws Exception{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("PatientAppointment.fxml"));
+        Parent root = loader.load();
+
+        LoggedController cont = loader.getController();
+
+        cont.setID(this.getID());
+        cont.setDoctorID(Connect.getPatientDoctor(this.getID()));
+        cont.populateAppointment();
+
+        Stage window = (Stage) appButt.getScene().getWindow();
+        Scene scene = new Scene(root, appButt.getScene().getWidth(), appButt.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
+    }
 }

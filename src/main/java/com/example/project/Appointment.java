@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static com.example.project.Connect.conn;
 
@@ -103,19 +104,30 @@ public class Appointment {
     }
 
     //Gets Appointment time from Doctor name
-    public String selectByDName(String Dname){
+    public ArrayList<String> selectByDName(String Dname, String date){
 
         //SQL Query
-        String sql = "SELECT time FROM APPOINTMENT WHERE doctorID = (SELECT doctorID FROM Doctor WHERE name = ?)";
+        String sql = "SELECT time, date FROM APPOINTMENT WHERE doctorID = (SELECT doctorID FROM Doctor WHERE name = ?) AND date = ?";
 
         try {//Gets Appointment Time
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, Dname);
+            pstmt.setString(2, date);
             ResultSet rs = pstmt.executeQuery();
-            return rs.getString("time");
+
+            ArrayList<String> arr = new ArrayList<>();
+
+            while (rs.next()) {
+                arr.add(rs.getString("time"));
+            }
+
+            return arr;
         }
         catch (SQLException e) {
             return null;
         }
     }
+
+
+
 }

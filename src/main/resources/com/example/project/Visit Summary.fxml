@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -21,13 +21,13 @@
          <items>
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="275.0" spacing="10.0" style="-fx-border-color: black;">
                <children>
-                  <ChoiceBox fx:id="visitDate" prefWidth="150.0" />
+                  <ComboBox fx:id="visitDate" prefWidth="150.0" />
                   <Label text="Visit Summary" />
                </children>
             </HBox>
             <TextFlow prefHeight="32.0" prefWidth="142.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
                <children>
-                  <Label alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Doctor" textAlignment="CENTER" translateY="1.0" wrapText="true" />
+                  <Label fx:id="visitDoctor" alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Doctor" textAlignment="CENTER" translateY="1.0" wrapText="true" />
                </children>
             </TextFlow>
             <Hyperlink fx:id="backPatDash" onAction="#PatDashClick" text="Back" textAlignment="CENTER" underline="true" wrapText="true">
@@ -114,7 +114,7 @@
                   <VBox alignment="CENTER" prefHeight="340.0" prefWidth="408.0" spacing="50.0" style="-fx-border-color: black;">
                      <children>
                         <Label alignment="CENTER" prefHeight="38.0" prefWidth="150.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Doctors Notes" textAlignment="CENTER" wrapText="true" />
-                        <TextFlow prefHeight="216.0" prefWidth="406.0" style="-fx-background-color: lightgray; -fx-border-color: black;" />
+                        <TextFlow maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="216.0" prefWidth="301.0" style="-fx-background-color: white; -fx-border-color: black;" />
                      </children>
                   </VBox>
                </children>

@@ -88,6 +88,23 @@ public class LogInController {
         cont.setName(id);
         cont.setDash(doc);
 
+        Stage window = (Stage) butt.getScene().getWindow();
+        Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
+    }
+
+    @FXML
+    protected void nurseLoginEvent(Button butt,String file, int id, DoctorDashboard doc) throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource(file));
+        Parent root = loader.load();
+
+        LoggedStaffController cont = loader.getController();
+
+        cont.setID(id);
+        cont.setNurseName(id);
+        cont.setDash(doc);
 
         Stage window = (Stage) butt.getScene().getWindow();
         Scene scene = new Scene(root, butt.getScene().getWidth(), butt.getScene().getHeight());
@@ -106,7 +123,8 @@ public class LogInController {
             if (doctorRadio.isSelected()) {
                 int m;
                 try {
-                    m = Connect.loginStaff(Integer.parseInt(staffID.getText()), staffPassword.getText());
+                    Connect connect = new Connect();
+                    m = connect.loginStaff(Integer.parseInt(staffID.getText()), staffPassword.getText());
                     if (m == -1) {
                         staffSignInLabel.setText("ID or password is incorrect");
                     }
@@ -122,7 +140,22 @@ public class LogInController {
             }
 
             else if (nurseRadio.isSelected()) {
-
+                int m;
+                try {
+                    Connect connect = new Connect();
+                    m = connect.loginNurse(Integer.parseInt(staffID.getText()), staffPassword.getText());
+                    if (m == -1) {
+                        staffSignInLabel.setText("ID or password is incorrect");
+                    }
+                    else {
+                        DoctorDashboard doc = new DoctorDashboard();
+                        doc.nurseSelect(m);
+                        nurseLoginEvent(staffLogin, "DoctorDashboard.fxml", m, doc);
+                    }
+                }
+                catch (NumberFormatException e) {
+                    staffSignInLabel.setText("Please enter an integer for the ID");
+                }
             }
 
             else {

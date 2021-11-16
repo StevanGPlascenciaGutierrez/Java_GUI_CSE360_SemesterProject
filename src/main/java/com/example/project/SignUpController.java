@@ -11,12 +11,14 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import static com.example.project.Connect.conn;
@@ -36,7 +38,7 @@ public class SignUpController {
     private PasswordField signUpPassword;
 
     @FXML
-    private Label firstInsName, firstInsPhone, firstInsAddress, firstInsMemberID, signUpLabel, patAppLabel, insuranceWarning, pharmacyWarning;
+    private Label signUpLabel, patAppLabel, insuranceWarning, pharmacyWarning;
 
     @FXML
     private DatePicker signUpBday, choiceDate;
@@ -45,13 +47,16 @@ public class SignUpController {
     private ChoiceBox<String> choiceTime;
 
     @FXML
-    private ChoiceBox<String> doctorChoice;
+    private ComboBox<String> doctorChoice;
 
     @FXML
     private TextArea doctorInfo;
 
     @FXML
     private Hyperlink backLogin;
+
+    @FXML
+    private TextField firstInsName, firstInsPhone, firstInsAddress, firstInsMemberID;
 
     private Parent root;
     private Scene scene;
@@ -67,7 +72,13 @@ public class SignUpController {
     }
 
     public void popup (String file) throws IOException {
-        Parent root = FXMLLoader.load(Project.class.getResource(file));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource(file));
+        Parent root = loader.load();
+
+        SignUpController appSet = loader.getController();
+        appSet.setID(this.getID());
+
         Stage box = new Stage();
         scene = new Scene(root);
         box.initModality(Modality.APPLICATION_MODAL);
@@ -83,6 +94,7 @@ public class SignUpController {
         Parent root = loader.load();
 
         SignUpController appSet = loader.getController();
+        appSet.setID(this.getID());
         appSet.populateAppointment();
 
         Stage box = new Stage();
@@ -92,6 +104,37 @@ public class SignUpController {
         box.setResizable(false);
         box.setScene(scene);
         box.showAndWait();
+    }
+
+    @FXML
+    public void onDoctorChange() throws Exception {
+        ArrayList<String> times = new ArrayList<>();
+        times.add(LocalTime.of(8, 0).toString());
+        times.add(LocalTime.of(10, 0).toString());
+        times.add(LocalTime.of(12, 0).toString());
+        times.add(LocalTime.of(14, 0).toString());
+        times.add(LocalTime.of(16, 0).toString());
+
+
+
+        Appointment app = new Appointment();
+        try {
+            ArrayList<String> timeList = app.selectByDName(doctorChoice.getValue(), choiceDate.getValue().toString());
+
+            for (int i = 0; i < times.size(); i++) {
+                for (int j = 0; j < timeList.size(); j++) {
+                    if (times.get(i).equals(timeList.get(j))) {
+                        times.remove(i); //removes equal elements to only populate times that doctor doesnt have
+                    }
+                }
+            }
+
+            choiceTime.getItems().setAll(times);
+        }
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     @FXML
@@ -112,7 +155,7 @@ public class SignUpController {
 
         }
         catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
 
 
@@ -137,7 +180,10 @@ public class SignUpController {
         try {
             LocalDate now = LocalDate.now();
             if (choiceDate.getValue().isAfter(now)) {
-                app.insert(choiceTime.getValue().toString(), choiceDate.getValue().toString(), Integer.valueOf(doctorChoice.getValue().toString()), this.getID(), 1);
+                int doctorID = Doctor.getDoctorID(doctorChoice.getValue());
+                app.insert(choiceTime.getValue().toString(), choiceDate.getValue().toString(), doctorID, this.getID(), Nurse.getNurseID(doctorID));
+                Patient pat = new Patient();
+                pat.updateDoctor(this.getID(), doctorID);
 
                 box.close();
             }

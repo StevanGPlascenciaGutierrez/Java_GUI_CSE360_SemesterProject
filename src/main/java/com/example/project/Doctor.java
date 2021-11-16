@@ -97,4 +97,20 @@ public class Doctor {
         return doc;
     }
 
+    public static int getDoctorID(String name) throws SQLException {
+        String sql = "SELECT doctorID FROM Doctor WHERE name = ?";
+
+        int id = -1;
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            id = rs.getInt("doctorID");
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return id;
+    }
 }
