@@ -125,6 +125,18 @@ public class LoggedController {
     @FXML
     private TextArea doctorNote;
 
+    @FXML
+    private TextField newMessage;
+
+    @FXML
+    private Hyperlink sendMessage;
+
+    @FXML
+    private TableView<Message> messageTable;
+
+    @FXML
+    private TableColumn<Message, String> docMessageCol, patMessageCol;
+
     private Parent root;
     private Scene scene;
     private Stage window;
@@ -332,6 +344,7 @@ public class LoggedController {
         LoggedController cont = loader.getController();
 
         cont.setID(this.getID());
+        cont.setDoctorID(this.getDoctorID());
 
         Prescription pre = new Prescription();
         ArrayList<Prescription> preList = pre.select(this.getID());
@@ -396,6 +409,7 @@ public class LoggedController {
         LoggedController cont = loader.getController();
 
         cont.setID(this.getID());
+        cont.setDoctorID(this.getDoctorID());
         VisitSummary visit = new VisitSummary();
         ArrayList<VisitSummary> visitArr;
         visitArr = visit.selectVisitSummary(this.getID());
@@ -408,9 +422,44 @@ public class LoggedController {
     }
 
     @FXML
+    protected void onSendMessage() {
+        Message.insertMessage(newMessage.getText(), this.getID(), this.getDoctorID());
+        loadChat(Message.getChat(this.getID(), this.getDoctorID()));
+    }
+
+    protected void loadChat(int chatNum) {
+
+        try {
+            ObservableList<Message> list = FXCollections.observableArrayList(new Message().selectMessage(chatNum));
+            docMessageCol.setCellValueFactory(new PropertyValueFactory<>("content"));
+            patMessageCol.setCellValueFactory(new PropertyValueFactory<>("content"));
+
+            messageTable.setItems(list);
+        }
+
+        catch (Exception e) {
+
+        }
+    }
+
+    @FXML
     protected void onMessagesClick() throws Exception{
         changeScene(toMessages, "messages.fxml", this.getID());
-        Message.getChat(this.getID(), this.getDoctorID());
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("messages.fxml"));
+        Parent root = loader.load();
+
+        LoggedController cont = loader.getController();
+
+        cont.setID(this.getID());
+        cont.setDoctorID(this.getDoctorID());
+        cont.loadChat(Message.getChat(this.getID(), this.getDoctorID()));
+
+        Stage window = (Stage) toMessages.getScene().getWindow();
+        Scene scene = new Scene(root, toMessages.getScene().getWidth(), toMessages.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
     }
 
     protected void logIn (Hyperlink butt,String file, int id, PatientDashboard pat) throws Exception {
@@ -487,6 +536,7 @@ public class LoggedController {
 
         LoggedController cont = loader.getController();
         cont.setID(this.getID());
+        cont.setDoctorID(this.getDoctorID());
 
         Stage box = new Stage();
         scene = new Scene(root);
@@ -535,6 +585,7 @@ public class LoggedController {
 
         LoggedController cont = loader.getController();
         cont.setID(this.getID());
+        cont.setDoctorID(this.getDoctorID());
 
         Stage box = new Stage();
         scene = new Scene(root);
@@ -562,6 +613,7 @@ public class LoggedController {
 
         LoggedController cont = loader.getController();
         cont.setID(this.getID());
+        cont.setDoctorID(this.getDoctorID());
 
         Stage box = new Stage();
         scene = new Scene(root);

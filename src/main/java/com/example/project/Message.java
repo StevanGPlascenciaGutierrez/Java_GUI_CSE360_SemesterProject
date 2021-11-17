@@ -61,7 +61,7 @@ public class Message {
         timeStamp = newTime;
     }
 
-    public ArrayList<Message> selectHealth(int patientID, int doctorID) throws SQLException {
+    public ArrayList<Message> selectMessage(int chatNum) throws SQLException {
         String sql = "SELECT Content "
                 + "FROM Messages WHERE ChatNum = ?";
 
@@ -71,15 +71,14 @@ public class Message {
         try {
             PreparedStatement pstmt  = conn.prepareStatement(sql);
             // Creates a prepared statement
-            int chatNUMBER = getChat(patientID, doctorID);
-            pstmt.setInt(1,chatNUMBER);
+            pstmt.setInt(1,chatNum);
             ResultSet result  = pstmt.executeQuery();
 
 
             while (result.next()) {
                 Message newMessage = new Message();
                 newMessage.setContent(result.getString("Content"));
-                newMessage.setChatNum(chatNUMBER);
+                newMessage.setChatNum(chatNum);
                 messageList.add(newMessage);
             }
         }
