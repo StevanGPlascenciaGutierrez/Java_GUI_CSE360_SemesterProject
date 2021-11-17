@@ -80,7 +80,7 @@ public class VisitSummary {
     }
 
     public ArrayList<VisitSummary> selectVisitSummary(int patientID){
-        String sql = "SELECT visitNumber, date, doctorNote, weight, height "
+        String sql = "SELECT visitNumber, date, doctorNote, weight, height, bmi "
                 + "FROM VisitSummary WHERE patientID = ?";
 
         ArrayList<VisitSummary> visits = new ArrayList<>();
@@ -215,6 +215,37 @@ public class VisitSummary {
 
         return num;
 
+    }
+
+    public VisitSummary selectVisitSummary(int patientID, String date){
+        String sql = "SELECT visitNumber, date, doctorNote, weight, height, bmi "
+                + "FROM VisitSummary WHERE patientID = ? AND date = ?";
+
+        VisitSummary visit = new VisitSummary();
+
+        // Connects
+        try {
+
+            PreparedStatement pstmt  = conn.prepareStatement(sql);
+            // Creates a prepared statement
+            pstmt.setInt(1,patientID);
+            pstmt.setString(2, date);
+            ResultSet result  = pstmt.executeQuery();
+
+            visit = new VisitSummary();
+            visit.setVisitNum(result.getInt("visitNumber"));
+            visit.setDate(result.getString("date"));
+            visit.setDoctorNote(result.getString("doctorNote"));
+            visit.setVitals(selectVitals(visit.getVisitNum()));
+            visit.setHealthIssues(selectHealth(visit.getVisitNum()));
+            visit.setWeight(result.getDouble("weight"));
+            visit.setHeight(result.getDouble("height"));
+            visit.setBMI(result.getDouble("bmi"));
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return visit;
     }
 
 

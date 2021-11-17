@@ -110,6 +110,21 @@ public class LoggedController {
     @FXML
     private Label allergyWarning;
 
+    @FXML
+    private Label visitDoctor, visitBasicName, visitBasicHeight, visitBasicWeight, visitBasicBMI;
+
+    @FXML
+    private Label visitHR, visitBT, visitBP, visitRR;
+
+    @FXML
+    private TableView<HealthIssues> newIssueTable;
+
+    @FXML
+    private TableColumn<HealthIssues, String> newIssueCol, newIssueDate, newIssueDescription;
+
+    @FXML
+    private TextArea doctorNote;
+
     private Parent root;
     private Scene scene;
     private Stage window;
@@ -329,11 +344,38 @@ public class LoggedController {
     }
 
     @FXML
-    protected void onVisitClick() throws Exception{
-        changeScene(visitSumButt, "Visit Summary.fxml", this.getID());
-        VisitSummary visit = new VisitSummary();
-        ArrayList<VisitSummary> visitArr;
-        visitArr = visit.selectVisitSummary(this.getID());
+    protected void onDateChange() {
+        try {
+            VisitSummary visit = new VisitSummary().selectVisitSummary(this.getID(), visitDate.getValue().toString());
+            visitDoctor.setText(Connect.getDoctorName(Connect.getPatientDoctor(this.getID())));
+
+            ObservableList<HealthIssues> issueList = FXCollections.observableArrayList(visit.getHealthIssues());
+            ArrayList<String> arr = Connect.getUser(this.getID());
+
+            visitBasicName.setText(arr.get(0));
+            visitBasicHeight.setText(Double.toString(visit.getHeight()));
+            visitBasicWeight.setText(Double.toString(visit.getWeight()));
+            visitBasicBMI.setText(Double.toString(visit.getBMI()));
+
+            visitBP.setText(Double.toString(visit.getVitals().getBloodPressure()));
+            visitHR.setText(Double.toString(visit.getVitals().getHeartRate()));
+            visitRR.setText(Double.toString(visit.getVitals().getRespiratoryRate()));
+            visitBT.setText(Double.toString(visit.getVitals().getBodyTemp()));
+
+            newIssueCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+            newIssueDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+            newIssueDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+            newIssueTable.setItems(issueList);
+
+            doctorNote.setText(visit.getDoctorNote());
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    protected void setSummary(ArrayList<VisitSummary> visitArr) {
         ArrayList<String> dateArr = new ArrayList<String>();
 
         for (VisitSummary vis : visitArr) {
@@ -343,6 +385,26 @@ public class LoggedController {
         ObservableList<String> dateList = FXCollections.observableArrayList(dateArr);
 
         visitDate.setItems(dateList);
+    }
+
+    @FXML
+    protected void onVisitClick() throws Exception{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("Visit Summary.fxml"));
+        root = loader.load();
+
+        LoggedController cont = loader.getController();
+
+        cont.setID(this.getID());
+        VisitSummary visit = new VisitSummary();
+        ArrayList<VisitSummary> visitArr;
+        visitArr = visit.selectVisitSummary(this.getID());
+        cont.setSummary(visitArr);
+
+        window = (Stage) visitSumButt.getScene().getWindow();
+        scene = new Scene(root, visitSumButt.getScene().getWidth(), visitSumButt.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
     }
 
     @FXML
