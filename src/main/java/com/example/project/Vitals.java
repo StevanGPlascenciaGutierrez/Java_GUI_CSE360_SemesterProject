@@ -38,6 +38,10 @@ public class Vitals {
         return bodyTemp;
     }
 
+    public void setBodyTemp(Double newBodyTemp){
+        this.bodyTemp = newBodyTemp;
+    }
+
     public void setBloodPressure(Double newBloodPressure) {
         this.bloodPressure = newBloodPressure;
     }
@@ -54,8 +58,8 @@ public class Vitals {
         this.bodyTemp = newBodyTemp;
     }
 
-    public static void insert(double BloodPressure, double HeartRate, double RespiratoryRate, double BodyTemp, int id){
-        String sql = "INSERT INTO Vitals(bloodPressure, heartRate, respiratoryRate, bodyTemp, patientID) VALUES(?,?,?,?)";
+    public void insert(double BloodPressure, double HeartRate, double RespiratoryRate, double BodyTemp, int id, int num){
+        String sql = "INSERT INTO Vitals(bloodPressure, heartRate, respRate, temperature, patientID, visitNumber) VALUES(?,?,?,?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setDouble(1, BloodPressure);
@@ -63,6 +67,7 @@ public class Vitals {
             pstmt.setDouble(3, RespiratoryRate);
             pstmt.setDouble(4, BodyTemp);
             pstmt.setInt(5, id);
+            pstmt.setInt(6, num);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {

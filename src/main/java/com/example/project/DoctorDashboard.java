@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import static com.example.project.Connect.conn;
 
-public class DoctorDashboard extends Dashboard {
+public class DoctorDashboard {
     private VisitSummary visitSummary;
     private ArrayList<Appointment> appointments;
     private ArrayList<Message> messages;

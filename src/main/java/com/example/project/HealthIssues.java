@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import static com.example.project.Connect.conn;
 
-public class HealthIssues {
+public class HealthIssues extends HealthHistory {
     private String name;
     private String description;
     private String date;
@@ -47,15 +47,17 @@ public class HealthIssues {
         this.date = date;
     }
 
-    public static void insert(String Name, String Description, String Date, int id){
-        String sql = "INSERT INTO HealthIssue(name, description, date, patientID) VALUES(?,?,?,?)";
+    public void insert(String Name, String Description, String Date, int id, int num){
+        String sql = "INSERT INTO HealthIssue(name, description, date, patientID, visitNumber) VALUES(?,?,?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, Name);
             pstmt.setString(2, Description);
             pstmt.setString(3, Date);
             pstmt.setInt(4, id);
+            pstmt.setInt(5, num);
             pstmt.executeUpdate();
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

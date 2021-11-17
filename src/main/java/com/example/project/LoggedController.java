@@ -89,6 +89,27 @@ public class LoggedController {
     @FXML
     private Label newPreWarning;
 
+    @FXML
+    private TableView<Allergy> allergyTable;
+
+    @FXML
+    private TableColumn<Allergy, String> allergyNameCol, allergyDescCol;
+
+    @FXML
+    private TextField newAllergyName, newAllergyDesc;
+
+    @FXML
+    private Button newAllergy;
+
+    @FXML
+    private TableView<HealthIssues> issueTable;
+
+    @FXML
+    private TableColumn<HealthIssues, String> issueNameCol, issueDescCol, issueDateCol;
+
+    @FXML
+    private Label allergyWarning;
+
     private Parent root;
     private Scene scene;
     private Stage window;
@@ -143,12 +164,12 @@ public class LoggedController {
     @FXML
     protected void setName(int id) throws SQLException {
         ArrayList<String> arr = Connect.getUser(id);
-        nameLabel.setText(arr.get(0));
+        nameLabel.setText("Patient: " + arr.get(0));
         patName.setText(arr.get(0));
         patPhone.setText(arr.get(1));
         patAddress.setText(arr.get(2));
         patEmail.setText(arr.get(3));
-        patDoctor.setText(arr.get(4));
+        patDoctor.setText("Doctor: " + arr.get(4));
     }
 
     @FXML
@@ -178,14 +199,73 @@ public class LoggedController {
             patImmune.setItems(immune);
         }
         catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
 
+    }
+
+    @FXML
+    protected void onInsertNewAllergy() {
+        try {
+            Allergy all = new Allergy();
+            all.setType(newAllergyName.getText());
+            all.setDescription(newAllergyDesc.getText());
+            all.insert(all, this.getID());
+
+            this.setHealthHistory(this.getID());
+        }
+        catch (Exception e) {
+            allergyWarning.setText("Please enter valid fields for each entry");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    protected void setHealthHistory (int patientID) {
+        HealthHistory health = new HealthHistory().select(patientID);
+        ObservableList<Allergy> allergyList = FXCollections.observableArrayList(health.getAllergies());
+        ObservableList<HealthIssues> issuesList = FXCollections.observableArrayList(health.getIssues());
+        try  {
+            allergyNameCol.setCellValueFactory(new PropertyValueFactory<Allergy, String>("type"));
+            allergyDescCol.setCellValueFactory(new PropertyValueFactory<Allergy, String>("description"));
+            allergyTable.setItems(allergyList);
+        }
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try  {
+            issueNameCol.setCellValueFactory(new PropertyValueFactory<HealthIssues, String>("name"));
+            issueDateCol.setCellValueFactory(new PropertyValueFactory<HealthIssues, String>("date"));
+            issueDescCol.setCellValueFactory(new PropertyValueFactory<HealthIssues, String>("description"));
+            issueTable.setItems(issuesList);
+        }
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
         }
 
     }
 
     @FXML
     protected void onPatHealthClick() throws Exception{
-        changeScene(patHealthHistClick, "Patient Health History.fxml", this.getID());
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("Patient Health History.fxml"));
+        Parent root = loader.load();
+
+        LoggedController cont = loader.getController();
+
+        cont.setID(this.getID());
+        cont.setDoctorID(Connect.getPatientDoctor(this.getID()));
+        cont.setHealthHistory(this.getID());
+
+        Stage window = (Stage) patHealthHistClick.getScene().getWindow();
+        Scene scene = new Scene(root, patHealthHistClick.getScene().getWidth(), patHealthHistClick.getScene().getHeight());
+        window.setScene(scene);
+        window.show();
+    }
+
+    @FXML
+    protected void onDeletePrescription() {
+
     }
 
     @FXML

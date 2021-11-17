@@ -56,9 +56,9 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="addNewPre" mnemonicParsing="false" onAction="#onNewPrescription" prefHeight="43.0" prefWidth="91.0" text="Add new" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Button fx:id="addNewPre" mnemonicParsing="false" onAction="#onNewPrescription" prefHeight="43.0" prefWidth="91.0" text="Add new" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <TextField fx:id="newPreName" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Name" />
-                  <Button fx:id="deletePre" mnemonicParsing="false" prefHeight="43.0" prefWidth="91.0" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Button fx:id="deletePre" mnemonicParsing="false" onAction="#onDeletePrescription" prefHeight="43.0" prefWidth="91.0" text="Delete selected" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <TextField fx:id="newPreDesc" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Description" GridPane.columnIndex="4" />
                   <TextField fx:id="newPreDosage" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Dosage" GridPane.columnIndex="3" />
                   <Label fx:id="newPreWarning" prefHeight="37.0" prefWidth="194.0" textFill="RED" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />

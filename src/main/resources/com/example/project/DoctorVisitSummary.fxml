@@ -25,13 +25,17 @@
          <items>
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="275.0" spacing="10.0" style="-fx-border-color: black;">
                <children>
-                  <ComboBox prefWidth="150.0" />
                   <Label text="Visit Summary" />
+                  <Button fx:id="submitVisit" mnemonicParsing="false" onAction="#onSubmitNewVisitSummary" text="Submit">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="40.0" prefWidth="275.0" spacing="10.0" style="-fx-border-color: black;">
                <children>
-                  <ComboBox prefWidth="150.0" />
+                  <ComboBox fx:id="patientComboBox" onAction="#onComboPatient" prefWidth="150.0" />
                   <Label text="Patient" />
                </children>
             </HBox>
@@ -46,7 +50,7 @@
    <center>
       <VBox alignment="CENTER" prefHeight="876.0" prefWidth="974.0" spacing="40.0" style="-fx-background-color: linear-gradient(to bottom, white, #cccccc);" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" prefHeight="335.0" prefWidth="1280.0" spacing="50.0">
+            <HBox alignment="CENTER" prefHeight="287.0" prefWidth="1280.0" spacing="50.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="335.0" prefWidth="377.0" spacing="50.0" style="-fx-border-color: black;">
                      <children>
@@ -63,14 +67,14 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Name" textAlignment="CENTER" wrapText="true" />
+                              <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="ID" textAlignment="CENTER" wrapText="true" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Height" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Weight" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="BMI" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label fx:id="visitorName" alignment="CENTER" prefHeight="18.0" prefWidth="151.0" textAlignment="CENTER" GridPane.columnIndex="1" />
+                              <TextField fx:id="patVisitHeight" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="patVisitWeight" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="patVisitBMI" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="visitorID" alignment="CENTER" prefHeight="26.0" prefWidth="151.0" textAlignment="CENTER" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                      </children>
@@ -94,34 +98,51 @@
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Body Temp" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Blood Pressure" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="2" />
                               <Label alignment="CENTER" prefHeight="27.0" prefWidth="90.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Respiration Rate" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="3" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="184.0" GridPane.columnIndex="1" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="newHeartRate" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="184.0" GridPane.columnIndex="1" />
+                              <TextField fx:id="newBodyTemp" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="newBloodPressure" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="newRespirationRate" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="340.0" prefWidth="1280.0" spacing="50.0">
+            <HBox alignment="CENTER" prefHeight="378.0" prefWidth="1280.0" spacing="50.0">
                <children>
-                  <VBox alignment="CENTER" prefHeight="340.0" prefWidth="423.0" spacing="20.0" style="-fx-border-color: black;">
+                  <VBox alignment="CENTER" prefHeight="340.0" prefWidth="423.0" spacing="15.0" style="-fx-border-color: black;">
                      <children>
                         <Label alignment="CENTER" prefHeight="38.0" prefWidth="150.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Health Issues" textAlignment="CENTER" wrapText="true" />
-                        <HBox alignment="CENTER" prefHeight="54.0" prefWidth="422.0" spacing="50.0">
+                        <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="91.0" prefWidth="322.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <TextField maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="190.0" />
-                              <Button alignment="CENTER" mnemonicParsing="false" text="Enter" textAlignment="CENTER" wrapText="true">
+                              <TextField fx:id="newHealthIssue" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="130.0" promptText="Issue" GridPane.rowIndex="1" />
+                              <Button fx:id="enterNewIssue" alignment="CENTER" mnemonicParsing="false" onAction="#onEnterHealthIssue" text="Enter" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </Button>
+                              <TextField fx:id="newIssueDescription" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="130.0" promptText="Description" GridPane.rowIndex="2" />
+                              <Label fx:id="visitIssueWarning" prefHeight="30.0" prefWidth="178.0" textAlignment="CENTER" textFill="RED" wrapText="true">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </Label>
                            </children>
-                        </HBox>
-                        <TableView editable="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="184.0" prefWidth="323.0">
+                        </GridPane>
+                        <TableView fx:id="insertIssueTable" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="184.0" prefWidth="323.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Issues" />
+                            <TableColumn fx:id="insertIssueCol" prefWidth="75.0" text="Issues" />
+                              <TableColumn fx:id="insertDescriptionCol" prefWidth="75.0" text="Description" />
+                              <TableColumn fx:id="insertDateCol" prefWidth="75.0" text="Date" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -134,7 +155,7 @@
                         <Label alignment="CENTER" prefHeight="38.0" prefWidth="150.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Doctors Notes" textAlignment="CENTER" wrapText="true" />
                         <TextFlow maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="218.0" prefWidth="253.0" style="-fx-background-color: lightgray; -fx-border-color: black;" textAlignment="CENTER">
                            <children>
-                              <TextArea prefHeight="215.0" prefWidth="250.0" />
+                              <TextArea fx:id="doctorNoteText" prefHeight="215.0" prefWidth="250.0" />
                            </children></TextFlow>
                      </children>
                   </VBox>

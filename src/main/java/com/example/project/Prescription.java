@@ -85,6 +85,20 @@ public class Prescription {
 
     }
 
+    public void delete(String description, String name){
+        String sql = "Delete from PRESCRIPTION where name = ? AND description = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setString(2, description);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
     public ArrayList<Prescription> select(int id) {
         String sql = "SELECT * FROM PRESCRIPTION WHERE patientID = ?";
         ArrayList<Prescription> arr = new ArrayList<>();

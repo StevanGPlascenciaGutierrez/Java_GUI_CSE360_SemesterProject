@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 import static com.example.project.Connect.conn;
 
-public class Allergy {
+public class Allergy extends HealthHistory{
     private String type;
     private String description;
 
@@ -34,7 +34,7 @@ public class Allergy {
         this.description = newDescription;
     }
 
-    public static void insert(Allergy all, int id){
+    public void insert(Allergy all, int id){
         String sql = "INSERT INTO ALLERGY(type, description, patientID) VALUES(?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);

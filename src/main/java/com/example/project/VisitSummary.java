@@ -20,6 +20,9 @@ public class VisitSummary {
         vitals = null;
         doctorNote = "";
         healthIssues = new ArrayList<>();
+        weight = 0;
+        height = 0;
+        BMI = 0;
 
     }
     public VisitSummary(String date, Vitals vitals, String doctorNote, ArrayList<HealthIssues> healthIssues, double weight, double height, double BMI) {
@@ -160,4 +163,59 @@ public class VisitSummary {
         }
         return issues;
     }
+
+    public void insert(VisitSummary visit, int patientID){
+        String sql = "INSERT INTO VisitSummary(patientID, date, doctorNote, weight, height, bmi) VALUES(?,?,?,?,?,?)";
+        // Connects
+        try{
+
+            PreparedStatement pstmt  = conn.prepareStatement(sql);
+            // Creates a prepared statement
+            pstmt.setInt(1, patientID);
+            pstmt.setString(2, visit.getDate());
+            pstmt.setString(3, visit.getDoctorNote());
+            pstmt.setDouble(4, visit.getWeight());
+            pstmt.setDouble(5, visit.getHeight());
+            pstmt.setDouble(6, visit.getBMI());
+            pstmt.executeUpdate();
+
+            Vitals vital = visit.getVitals();
+
+            int num = getVisitNum(patientID, visit.getDoctorNote());
+
+            vital.insert(vital.getBloodPressure(), vital.getHeartRate(), vital.getRespiratoryRate(), vital.getBodyTemp(), patientID, num);
+            ArrayList<HealthIssues> issueList = visit.getHealthIssues();
+            for (HealthIssues issue : issueList) {
+                issue.insert(issue.getName(), issue.getDescription(), issue.getDate(), patientID, num);
+            }
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public int getVisitNum(int id, String text) {
+        String sql = "Select VisitNumber from VisitSummary Where patientID = ? AND doctorNote = ?";
+        int num = 0;
+        // Connects
+        try {
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            // Creates a prepared statement
+            pstmt.setInt(1, id);
+            pstmt.setString(2, text);
+
+            ResultSet rs = pstmt.executeQuery();
+            num = rs.getInt("visitNumber");
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return num;
+
+    }
+
+
 }

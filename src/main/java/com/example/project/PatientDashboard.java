@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import static com.example.project.Connect.conn;
 
-public class PatientDashboard extends Dashboard {
+public class PatientDashboard {
     private Insurance insurance;
     private Pharmacy pharmacy;
     private ArrayList<Immunization> immunizations;
