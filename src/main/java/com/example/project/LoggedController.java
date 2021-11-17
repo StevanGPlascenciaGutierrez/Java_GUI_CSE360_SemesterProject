@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -430,9 +431,21 @@ public class LoggedController {
     protected void loadChat(int chatNum) {
 
         try {
-            ObservableList<Message> list = FXCollections.observableArrayList(new Message().selectMessage(chatNum));
-            docMessageCol.setCellValueFactory(new PropertyValueFactory<>("content"));
+            ArrayList<Message> arr = new Message().selectMessage(chatNum);
+            for (Message mess : arr){
+                String temp = mess.getContent();
+                int t = temp.indexOf(" ");
+                if (temp.substring(0, t+1).equals("Doctor: ")) {
+                    mess.setSender(mess.getContent());
+                    mess.setContent(" ");
+                }
+
+            }
+
+            ObservableList<Message> list = FXCollections.observableArrayList(arr);
+
             patMessageCol.setCellValueFactory(new PropertyValueFactory<>("content"));
+            docMessageCol.setCellValueFactory(new PropertyValueFactory<>("sender"));
 
             messageTable.setItems(list);
         }
@@ -444,8 +457,6 @@ public class LoggedController {
 
     @FXML
     protected void onMessagesClick() throws Exception{
-        changeScene(toMessages, "messages.fxml", this.getID());
-
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Project.class.getResource("messages.fxml"));
         Parent root = loader.load();
@@ -460,7 +471,18 @@ public class LoggedController {
         Scene scene = new Scene(root, toMessages.getScene().getWidth(), toMessages.getScene().getHeight());
         window.setScene(scene);
         window.show();
+
+        cont.hideHeader();
+
     }
+
+    protected void hideHeader() {
+        Pane header = (Pane) messageTable.lookup("TableHeaderRow");
+        header.setVisible(false);
+        messageTable.setLayoutY(-header.getHeight());
+        messageTable.autosize();
+    }
+
 
     protected void logIn (Hyperlink butt,String file, int id, PatientDashboard pat) throws Exception {
         FXMLLoader loader = new FXMLLoader();

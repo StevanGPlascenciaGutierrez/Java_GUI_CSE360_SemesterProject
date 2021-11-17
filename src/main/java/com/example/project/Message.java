@@ -92,13 +92,26 @@ public class Message {
         String sql = "INSERT INTO Messages(Content,ChatNum) VALUES(?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, content);
+            pstmt.setString(1, "Patient: " + content);
             pstmt.setInt(2,getChat(patientID,doctorID));
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void insertMessageDoctor(String content, int patientID, int doctorID){
+        String sql = "INSERT INTO Messages(Content,ChatNum) VALUES(?,?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, "Doctor: " + content);
+            pstmt.setInt(2,getChat(patientID,doctorID));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static int getChat(int patientID, int doctorID)
     {
         String sql = "SELECT ChatNum "
