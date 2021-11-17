@@ -229,30 +229,6 @@ public class LoggedStaffController {
             patSearchLink.setCellValueFactory(new PropertyValueFactory<>("link"));
             patSearchTable.setItems(pat);
 
-            FilteredList<Patient> filteredData = new FilteredList<>(pat, b -> true);
-            searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
-                filteredData.setPredicate(searchModel -> {
-                    if (newValue.isEmpty() || newValue == null || newValue.isBlank()) {
-                        return true;
-                    }
-
-                    String key = newValue.toLowerCase();
-
-                    if (searchModel.getName().toLowerCase().indexOf(key) > -1) {
-                        return true;
-                    }
-                    else if (Integer.toString(searchModel.getID()).indexOf(key) > -1) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                });
-            } );
-
-            SortedList<Patient> sort = new SortedList<>(filteredData);
-            sort.comparatorProperty().bind(patSearchTable.comparatorProperty());
-
         }
         catch (NullPointerException e) {
 
@@ -263,6 +239,30 @@ public class LoggedStaffController {
     @FXML
     protected void onSearch() {
         ObservableList<Patient> pat = patSearchTable.getItems();
+        FilteredList<Patient> filteredData = new FilteredList<>(pat, b -> true);
+        searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(searchData -> {
+                if (newValue.isEmpty() || newValue == null || newValue.isBlank()) {
+                    return true;
+                }
+
+                String key = newValue.toLowerCase();
+
+                if (searchData.getName().toLowerCase().indexOf(key) > -1) {
+                    return true;
+                }
+                else if (Integer.toString(searchData.getID()).indexOf(key) > -1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            });
+        } );
+
+        SortedList<Patient> newList = new SortedList<>(filteredData);
+        newList.comparatorProperty().bind(patSearchTable.comparatorProperty());
+        patSearchTable.setItems(newList);
 
     }
 
