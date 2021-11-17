@@ -11,16 +11,20 @@ import static com.example.project.Connect.conn;
 public class Appointment {
     private String time;
     private String date;
+    private String name;
     private Doctor doctor;
     private Patient patient;
     private Nurse nurse;
 
     public Appointment(){
+        this.name = null;
+
     }
 
-    public Appointment(String time, String date, Doctor doctor, Patient patient, Nurse nurse){
+    public Appointment(String time, String date, String name, Doctor doctor, Patient patient, Nurse nurse){
         this.time = time;
         this.date = date;
+        this.name = name;
         this.doctor = doctor;
         this.patient = patient;
         this.nurse = nurse;
@@ -44,6 +48,12 @@ public class Appointment {
     public Nurse getNurse() {
         return nurse;
     }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
+    }
 
     public void setTime(String newTime) {
         this.time = newTime;
@@ -64,6 +74,8 @@ public class Appointment {
     public void setNurse(Nurse newNurse) {
         this.nurse = newNurse;
     }
+
+
 
     public void insert(String time, String date, int doctorID, int patientID, int nurseID){
         String sql = "INSERT INTO APPOINTMENT(time, date, doctorID, patientID, nurseID) VALUES(?,?,?,?,?)";

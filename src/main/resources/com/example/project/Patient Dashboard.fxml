@@ -166,9 +166,9 @@
                      <top>
                         <ToolBar prefHeight="49.0" prefWidth="762.0" style="-fx-spacing: 40; -fx-alignment: center;" BorderPane.alignment="CENTER">
                            <items>
-                              <HBox prefHeight="40.0" prefWidth="140.0" />
+                              <Hyperlink fx:id="addNewImm" alignment="CENTER" onAction="#onNewImmunization" prefHeight="24.0" prefWidth="83.0" text="Add New" underline="true" />
                               <Label alignment="CENTER" prefHeight="19.0" prefWidth="159.0" style="-fx-border-color: black;" text="Immunization History" textAlignment="CENTER" />
-                              <Hyperlink fx:id="addNewImm" alignment="CENTER" onAction="#onNewImmunization" text="Add New" underline="true" />
+                              <Hyperlink fx:id="deleteImm" alignment="CENTER" onAction="#onDeleteImmunization" text="Delete Selected" textAlignment="CENTER" underline="true" />
                            </items>
                         </ToolBar>
                      </top>

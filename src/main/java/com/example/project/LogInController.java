@@ -130,7 +130,7 @@ public class LogInController {
                     }
                     else {
                         DoctorDashboard doc = new DoctorDashboard();
-                        doc.select(m);
+                        doc = doc.select(m);
                         staffLoginEvent(staffLogin, "DoctorDashboard.fxml", m, doc);
                     }
                 }
@@ -149,7 +149,7 @@ public class LogInController {
                     }
                     else {
                         DoctorDashboard doc = new DoctorDashboard();
-                        doc.nurseSelect(m);
+                        doc = doc.nurseSelect(m);
                         nurseLoginEvent(staffLogin, "DoctorDashboard.fxml", m, doc);
                     }
                 }

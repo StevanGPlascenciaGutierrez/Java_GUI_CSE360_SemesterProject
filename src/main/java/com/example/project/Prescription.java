@@ -85,12 +85,14 @@ public class Prescription {
 
     }
 
-    public void delete(String description, String name){
-        String sql = "Delete from PRESCRIPTION where name = ? AND description = ?";
+    public void delete(String description, String name, String start, String end){
+        String sql = "Delete from PRESCRIPTION where name = ? AND description = ? AND startDate = ? AND endDate = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, name);
             pstmt.setString(2, description);
+            pstmt.setString(3, start);
+            pstmt.setString(4, end);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {

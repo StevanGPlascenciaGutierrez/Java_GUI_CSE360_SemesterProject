@@ -49,7 +49,7 @@
       </BorderPane>
    </top>
    <center>
-      <TableView fx:id="messageTable" fixedCellSize="20.0" prefHeight="200.0" prefWidth="200.0" style="-fx-table-cell-border-color: transparent; -fx-background-color: white;" BorderPane.alignment="CENTER">
+      <TableView fx:id="messageTable" fixedCellSize="27.0" prefHeight="200.0" prefWidth="200.0" style="-fx-table-cell-border-color: transparent; -fx-background-color: white;" BorderPane.alignment="CENTER">
          <placeholder>
             <Label text="" />
          </placeholder>

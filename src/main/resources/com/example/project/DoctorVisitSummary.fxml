@@ -125,7 +125,7 @@
                           </rowConstraints>
                            <children>
                               <TextField fx:id="newHealthIssue" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="130.0" promptText="Issue" GridPane.rowIndex="1" />
-                              <Button fx:id="enterNewIssue" alignment="CENTER" mnemonicParsing="false" onAction="#onEnterHealthIssue" text="Enter" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <Button fx:id="enterNewIssue" alignment="CENTER" mnemonicParsing="false" onAction="#onEnterHealthIssue" prefHeight="26.0" prefWidth="50.0" text="Enter" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -136,6 +136,11 @@
                                     <Font size="10.0" />
                                  </font>
                               </Label>
+                              <Button fx:id="deleteIssue" alignment="CENTER" mnemonicParsing="false" onAction="#onDeleteIssue" text="Delete" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
                            </children>
                         </GridPane>
                         <TableView fx:id="insertIssueTable" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="184.0" prefWidth="323.0">

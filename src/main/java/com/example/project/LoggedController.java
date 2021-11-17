@@ -293,6 +293,20 @@ public class LoggedController {
 
     @FXML
     protected void onDeletePrescription() {
+        ObservableList<Prescription> prescriptionsList = prescriptionTable.getSelectionModel().getSelectedItems();
+
+        for (Prescription pre : prescriptionsList) {
+            pre.delete(pre.getDescription(), pre.getName(), pre.getStartDate(), pre.getEndDate());
+        }
+
+        ArrayList<Prescription> preList = new Prescription().select(this.getID());
+
+        try {
+            this.setPrescriptions(preList);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 
@@ -619,6 +633,25 @@ public class LoggedController {
         PatientDashboard pat = new PatientDashboard();
         pat.select(this.getID());
         setDash(pat);
+
+    }
+
+    @FXML
+    protected void onDeleteImmunization() {
+        ObservableList<Immunization> immuneList = patImmune.getSelectionModel().getSelectedItems();
+
+        for (Immunization imm : immuneList) {
+            imm.delete(imm, this.getID());
+        }
+
+        PatientDashboard dash = new PatientDashboard().select(this.getID());
+
+        try {
+            this.setDash(dash);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 

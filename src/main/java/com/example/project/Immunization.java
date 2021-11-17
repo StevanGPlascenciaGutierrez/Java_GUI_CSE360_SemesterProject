@@ -59,4 +59,20 @@ public class Immunization {
         }
     }
 
+    public void delete(Immunization imm, int patientID){
+        String sql = "Delete from Immunization where patientID = ? AND date = ? AND description = ? AND type = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, patientID);
+            pstmt.setString(2, imm.getDate());
+            pstmt.setString(3, imm.getDescription());
+            pstmt.setString(4, imm.getType());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
 }

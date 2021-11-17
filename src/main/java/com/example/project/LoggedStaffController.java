@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class LoggedStaffController {
     private Hyperlink backDocDash, backPatSearch;
 
     @FXML
-    private Button deletePatient, docPatients, docVisit, logoutButton, searchButton;
+    private Button deletePatient, docPatients, docVisit, logoutButton;
 
     @FXML
     private Label nameLabel, insName, insPhone, insAddress, insID, pharmName, pharmAddress, pharmPhone;
@@ -213,9 +214,11 @@ public class LoggedStaffController {
             patDateCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
             patTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("time"));
             patAppointTable.setItems(appoint);
+
+
         }
         catch (NullPointerException e) {
-
+            System.out.println(e.getMessage());
         }
 
     }
@@ -307,7 +310,7 @@ public class LoggedStaffController {
     @FXML
     protected void onDocDashClick() throws Exception {
         DoctorDashboard doc = new DoctorDashboard();
-        doc.select(this.getID());
+        doc = doc.select(this.getID());
         logIn(backDocDash, "DoctorDashboard.fxml", this.getID(), doc);
     }
 
@@ -375,8 +378,38 @@ public class LoggedStaffController {
         try {
 
             patientComboBox.setItems(FXCollections.observableList(patList));
+            patientComboBox.setCellFactory(
+                    new Callback<ListView<Patient >, ListCell<Patient >>() {
+                        @Override
+                        public ListCell<Patient> call(ListView<Patient > p) {
+                            ListCell cell = new ListCell<Patient >() {
+                                @Override
+                                protected void updateItem(Patient item, boolean empty) {
+                                    super.updateItem(item, empty);
+                                    if (empty) {
+                                        setText("");
+                                    } else {
+                                        setText(item.getName());
+                                    }
+                                }
+                            };
+                            return cell;
+                        }
+                    });
 
 
+            patientComboBox.setButtonCell(
+                    new ListCell<Patient>() {
+                        @Override
+                        protected void updateItem(Patient t, boolean bln) {
+                            super.updateItem(t, bln);
+                            if (bln) {
+                                setText("");
+                            } else {
+                                setText(t.getName());
+                            }
+                        }
+                    });
 
 
         }
@@ -415,6 +448,13 @@ public class LoggedStaffController {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    @FXML
+    protected void onDeleteIssue () {
+        insertIssueTable.getItems().removeAll(
+                insertIssueTable.getSelectionModel().getSelectedItems()
+        );
     }
 
     @FXML

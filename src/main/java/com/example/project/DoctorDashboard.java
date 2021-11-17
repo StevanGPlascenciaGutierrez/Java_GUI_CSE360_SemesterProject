@@ -1,6 +1,8 @@
 package com.example.project;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import static com.example.project.Connect.conn;
@@ -42,13 +44,15 @@ public class DoctorDashboard {
     //Returns Doctor Dashboard object from database;
     public DoctorDashboard select(int doctorID) {
 
+        DoctorDashboard dash = new DoctorDashboard();
+
         //Hold needed Objects
         visitSummary = null;
-        appointments = new ArrayList<Appointment>();
-        messages = new ArrayList<Message>();
+        ArrayList<Appointment> appointments = new ArrayList<Appointment>();
+        ArrayList<Message> messages = new ArrayList<Message>();
 
         //SQL Query Strings
-        String aptSQL = "SELECT * FROM appointments WHERE doctorID = ? ";
+        String aptSQL = "SELECT * FROM appointment WHERE doctorID = ? ";
 
         //Connects To Database
         try  {
@@ -97,14 +101,37 @@ public class DoctorDashboard {
                 ts = pstmt.executeQuery();
                 Nurse nur = new Nurse(ts.getString("name"),nurseID, ts.getString("password"), doc);
 
-
-                appointments.add(new Appointment(time,date,doc,pat,nur));
+                if (LocalDate.parse(date).compareTo(LocalDate.now()) < 0 && (LocalTime.parse(time).compareTo(LocalTime.now()) < 0)) {
+                    Appointment app = new Appointment(time,date,pat.getName(),doc,pat,nur); //checks if appointment has passed
+                    deleteAppointment(app);
+                }
+                else {
+                    appointments.add(new Appointment(time,date,pat.getName(),doc,pat,nur));
+                }
 
             }
+            dash.setAppointments(appointments);
+            dash.setMessages(messages);
+            dash.setVisitSummary(visitSummary);
 
-            return this;
+            return dash;
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    public void deleteAppointment(Appointment app) {
+        String sql = "DELETE FROM Appointment WHERE time = ? and doctorid = ? and date = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, app.getTime());
+            pstmt.setInt(2, app.getDoctor().getStaffID());
+            pstmt.setString(3, app.getDate());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
