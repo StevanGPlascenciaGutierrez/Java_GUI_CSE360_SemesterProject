@@ -181,7 +181,7 @@ public class VisitSummary {
 
             Vitals vital = visit.getVitals();
 
-            int num = getVisitNum(patientID, visit.getDoctorNote());
+            int num = getVisitNum(patientID, visit.getDoctorNote(), visit.getDate());
 
             vital.insert(vital.getBloodPressure(), vital.getHeartRate(), vital.getRespiratoryRate(), vital.getBodyTemp(), patientID, num);
             ArrayList<HealthIssues> issueList = visit.getHealthIssues();
@@ -194,8 +194,8 @@ public class VisitSummary {
         }
     }
 
-    public int getVisitNum(int id, String text) {
-        String sql = "Select VisitNumber from VisitSummary Where patientID = ? AND doctorNote = ?";
+    public int getVisitNum(int id, String text, String date) {
+        String sql = "Select VisitNumber from VisitSummary Where patientID = ? AND doctorNote = ? AND date = ?";
         int num = 0;
         // Connects
         try {
@@ -204,6 +204,7 @@ public class VisitSummary {
             // Creates a prepared statement
             pstmt.setInt(1, id);
             pstmt.setString(2, text);
+            pstmt.setString(3, date);
 
             ResultSet rs = pstmt.executeQuery();
             num = rs.getInt("visitNumber");

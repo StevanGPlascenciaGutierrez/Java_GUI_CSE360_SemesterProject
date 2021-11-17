@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -86,13 +87,23 @@ public class LoggedStaffController {
     @FXML
     private TableColumn<HealthIssues, String > insertIssueCol, insertDescriptionCol, insertDateCol;
 
+    @FXML
+    private TableView<Message> messageTable;
+
+    @FXML
+    private TableColumn patMessageCol, docMessageCol;
+
+    @FXML
+    private TextField newMessage;
+
+    @FXML
+    private ComboBox<Patient> patientMessageCombo;
+
     private Parent root;
     private Scene scene;
     private Stage window;
 
     private int userID;
-
-    private boolean type;
 
     protected void setID(int id) {
         this.userID = id;
@@ -204,23 +215,121 @@ public class LoggedStaffController {
         nameLabel.setText(temp);
     }
 
+    protected void hideHeader() {
+        Pane header = (Pane) messageTable.lookup("TableHeaderRow");
+        header.setVisible(false);
+        messageTable.setLayoutY(-header.getHeight());
+        messageTable.autosize();
+    }
+
+
     @FXML
     protected void setDash(DoctorDashboard doc) throws Exception {
+
         ArrayList<Appointment> app = doc.getAppointments();
 
         ObservableList<Appointment> appoint = FXCollections.observableArrayList(app);
+
+        ArrayList<Patient> patList = new Patient().select(this.getID());
+
         try  {
             patNameCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("name"));
             patDateCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("date"));
             patTimeCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("time"));
             patAppointTable.setItems(appoint);
 
+            patientMessageCombo.setItems(FXCollections.observableArrayList(patList));
+            patientMessageCombo.setCellFactory(
+                    new Callback<ListView<Patient >, ListCell<Patient >>() {
+                        @Override
+                        public ListCell<Patient> call(ListView<Patient > p) {
+                            ListCell cell = new ListCell<Patient >() {
+                                @Override
+                                protected void updateItem(Patient item, boolean empty) {
+                                    super.updateItem(item, empty);
+                                    if (empty) {
+                                        setText("");
+                                    } else {
+                                        setText(item.getName());
+                                    }
+                                }
+                            };
+                            return cell;
+                        }
+                    });
+
+
+            patientMessageCombo.setButtonCell(
+                    new ListCell<Patient>() {
+                        @Override
+                        protected void updateItem(Patient t, boolean bln) {
+                            super.updateItem(t, bln);
+                            if (bln) {
+                                setText("");
+                            } else {
+                                setText(t.getName());
+                            }
+                        }
+                    });
 
         }
         catch (NullPointerException e) {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    @FXML
+    protected void onSendMessage() {
+        try {
+            Message.insertMessageDoctor(newMessage.getText(), patientMessageCombo.getValue().getID() , this.getID());
+            loadChat(Message.getChat(patientMessageCombo.getValue().getID(), this.getID()));
+        }
+
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    @FXML
+    protected void onMessagePatientChange() throws Exception{
+        loadChat(Message.getChat(patientMessageCombo.getValue().getID(), this.getID()));
+
+        try {
+            hideHeader();
+        }
+
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    protected void loadChat(int chatNum) {
+
+        try {
+            ArrayList<Message> arr = new Message().selectMessage(chatNum);
+            for (Message mess : arr){
+                String temp = mess.getContent();
+                int t = temp.indexOf(" ");
+                if (temp.substring(0, t+1).equals("Doctor: ")) {
+                    mess.setSender(mess.getContent());
+                    mess.setContent(" ");
+                }
+
+            }
+
+            ObservableList<Message> list = FXCollections.observableArrayList(arr);
+
+            patMessageCol.setCellValueFactory(new PropertyValueFactory<>("content"));
+            docMessageCol.setCellValueFactory(new PropertyValueFactory<>("sender"));
+
+            messageTable.setItems(list);
+        }
+
+        catch (Exception e) {
+
+        }
     }
 
     @FXML
@@ -355,7 +464,7 @@ public class LoggedStaffController {
             Alert warning = new Alert(Alert.AlertType.ERROR);
             warning.setTitle("Warning");
             warning.setHeaderText("Invalid entries");
-            warning.setContentText("Please eneter valid entries for every field");
+            warning.setContentText("Please enter valid entries for every field");
             warning.showAndWait();
             System.out.println(e.getMessage());
         }
