@@ -65,7 +65,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="327.0" prefWidth="1097.0" spacing="50.0">
                <children>
-                  <VBox alignment="CENTER" prefHeight="296.0" prefWidth="254.0" spacing="50.0" style="-fx-border-color: black;">
+                  <VBox alignment="CENTER" prefHeight="296.0" prefWidth="254.0" spacing="40.0" style="-fx-border-color: black;">
                      <children>
                         <Label alignment="CENTER" prefHeight="38.0" prefWidth="150.0" style="-fx-border-color: black; -fx-border-radius: 15;" text="Patient Info" textAlignment="CENTER" wrapText="true" />
                         <GridPane alignment="CENTER" prefHeight="142.0" prefWidth="253.0">
@@ -90,11 +90,20 @@
                               <Label fx:id="patPhone" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
-                        <Button fx:id="editPatientInfo" mnemonicParsing="false" onAction="#onEditPatient" text="Edit Info" textAlignment="CENTER" wrapText="true">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
+                        <HBox alignment="CENTER" prefHeight="22.0" prefWidth="253.0" spacing="20.0">
+                           <children>
+                              <Button fx:id="editPatientInfo" mnemonicParsing="false" onAction="#onEditPatient" text="Edit Info" textAlignment="CENTER" wrapText="true">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="editPatientPassword" mnemonicParsing="false" onAction="#onEditPassword" prefWidth="90.0" text="Edit Password" textAlignment="CENTER" wrapText="true">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="296.0" prefWidth="254.0" spacing="25.0" style="-fx-border-color: black;">

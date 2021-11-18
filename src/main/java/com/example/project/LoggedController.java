@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -14,18 +13,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.example.project.Connect.conn;
 
@@ -137,6 +130,15 @@ public class LoggedController {
 
     @FXML
     private TableColumn<Message, String> docMessageCol, patMessageCol;
+
+    @FXML
+    private Button submitNewPassword;
+
+    @FXML
+    private PasswordField oldPass, newPass;
+
+    @FXML
+    private Label passwordWarning;
 
     private Parent root;
     private Scene scene;
@@ -462,6 +464,9 @@ public class LoggedController {
             docMessageCol.setCellValueFactory(new PropertyValueFactory<>("sender"));
 
             messageTable.setItems(list);
+
+            hideHeader();
+
         }
 
         catch (Exception e) {
@@ -486,7 +491,15 @@ public class LoggedController {
         window.setScene(scene);
         window.show();
 
-        cont.hideHeader();
+
+        try {
+            cont.hideHeader();
+        }
+
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
+
 
     }
 
@@ -790,4 +803,45 @@ public class LoggedController {
         window.setScene(scene);
         window.show();
     }
+
+    @FXML
+    protected void onEditPassword() throws Exception {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Project.class.getResource("EditPassword.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        LoggedController cont = loader.getController();
+        cont.setID(this.getID());
+        cont.setDoctorID(this.getDoctorID());
+
+        Stage box = new Stage();
+        scene = new Scene(root);
+        box.initModality(Modality.APPLICATION_MODAL);
+        box.setResizable(false);
+        box.setScene(scene);
+        box.showAndWait();
+    }
+
+    @FXML
+    protected void onSubmitPassword() {
+        Stage box = (Stage) submitNewPassword.getScene().getWindow();
+
+        try {
+            String oldPassword = oldPass.getText();
+            String newPassword = newPass.getText();
+
+            new Patient().updatePassword(this.getID(), oldPassword, newPassword);
+
+            box.close();
+        }
+        catch (Exception e) {
+            passwordWarning.setText("Please enter valid entries for each field");
+        }
+    }
+
 }

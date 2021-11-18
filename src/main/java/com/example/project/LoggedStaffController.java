@@ -13,18 +13,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static com.example.project.Connect.conn;
 
@@ -37,7 +33,7 @@ public class LoggedStaffController {
     private Button deletePatient, docPatients, docVisit, logoutButton;
 
     @FXML
-    private Label nameLabel, insName, insPhone, insAddress, insID, pharmName, pharmAddress, pharmPhone;
+    private Label nameLabel, nurseName, insName, insPhone, insAddress, insID, pharmName, pharmAddress, pharmPhone;
 
     @FXML
     private Label patIDLabel, patNameLabel, patAddressLabel, patEmailLabel, patPhoneLabel;
@@ -197,22 +193,22 @@ public class LoggedStaffController {
 
         rs.close();
 
-        nameLabel.setText(temp);
+        nameLabel.setText("Doctor: " + temp);
+        setNurseName(this.getID());
     }
 
-    @FXML
     protected void setNurseName(int id) throws SQLException {
         String docSQL = "SELECT name FROM Nurse WHERE nurseID = ?";
         String temp;
         PreparedStatement stmt = conn.prepareStatement(docSQL);
-        stmt.setInt(1, id);
+        stmt.setInt(1, new Nurse().getNurseName(id));
         ResultSet rs = stmt.executeQuery();
 
         temp = rs.getString("name");
 
         rs.close();
 
-        nameLabel.setText(temp);
+        nurseName.setText("Nurse: " + temp);
     }
 
     protected void hideHeader() {

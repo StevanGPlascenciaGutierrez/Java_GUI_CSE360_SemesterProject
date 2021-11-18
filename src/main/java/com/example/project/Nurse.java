@@ -107,4 +107,19 @@ public class Nurse {
         return nurse;
     }
 
+    public int getNurseName(int nurseID) {
+        String nurSQL = "SELECT doctorID FROM Nurse WHERE nurseID = ?";
+
+        try{//Returns Dashboard by getting the Nurse's Doctor
+            PreparedStatement pstmt = conn.prepareStatement(nurSQL);
+            pstmt.setInt(1,nurseID);
+            ResultSet rs = pstmt.executeQuery();
+            int doctorID = rs.getInt("doctorID");
+
+            return doctorID;
+        }catch(SQLException e){
+            return -1;
+        }
+    }
+
 }

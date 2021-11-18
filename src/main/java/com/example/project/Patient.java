@@ -12,10 +12,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 import static com.example.project.Connect.conn;
@@ -151,17 +148,6 @@ public class Patient {
         }
     }
 
-    public void delete(int id){
-        String sql = "DELETE FROM Patient WHERE patientID = ?";
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public ArrayList<Patient> select(int id) {
         String sql = "SELECT * FROM Patient WHERE currentDoctor = ?";
         ArrayList<Patient> patList = new ArrayList<Patient>();
@@ -272,6 +258,199 @@ public class Patient {
             pstmt.setInt(1, doctor);
             pstmt.setInt(2, id);
 
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public String getPassword(int id) throws SQLException {
+        String sql = "SELECT password FROM Patient WHERE patientID = ?";
+        String pass = "";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            pass = rs.getString("password");
+
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return pass;
+    }
+
+    public boolean updatePassword(int id, String oldPassword, String newPassword) throws SQLException {
+        String sql = "Update Patient Set password = ? WHERE patientID = ?";
+        if (getPassword(id).equals(oldPassword)) {
+            try {
+
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, newPassword);
+                pstmt.setInt(2, id);
+                pstmt.executeUpdate();
+            }
+            catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public void delete(int id){
+        String sql = "DELETE FROM Patient WHERE patientID = ?";
+
+        try {
+            deleteAllergies(id);
+            deleteAppointments(id);
+            deleteChat(id);
+            deleteImmunizations(id);
+            deleteInsurance(id);
+            deletePharmacy(id);
+            deleteVitals(id);
+            deleteVS(id);
+            deletePrescriptions(id);
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void deleteAppointments(int id){
+        String sql = "DELETE FROM Appointment WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void deleteImmunizations(int id){
+        String sql = "DELETE FROM Immunization WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void deleteAllergies(int id){
+        String sql = "DELETE FROM Allergy WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void deleteInsurance(int id){
+        String sql = "DELETE FROM Insurance WHERE patientID = ?";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public ArrayList<Integer> getChatNums(int id){
+        String sql = "SELECT ChatNum FROM Chat WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Integer> arr = new ArrayList<Integer>();
+
+            while (rs.next()) {
+                arr.add(rs.getInt("chatNum"));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public void deleteChat(int id){
+        String sql = "DELETE FROM Messages WHERE chatNum = ?";
+        String sqlTwo = "DELETE FROM Messages WHERE chatNum = ?";
+        try {
+
+            ArrayList<Integer> arr = getChatNums(id);
+            for (int chatNum : arr) {
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setInt(1, chatNum);
+                pstmt.executeUpdate();
+
+                PreparedStatement stmt = conn.prepareStatement(sqlTwo);
+                stmt.setInt(1, chatNum);
+                stmt.executeUpdate();
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void deletePharmacy(int id){
+        String sql = "DELETE FROM Pharamacy WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void deletePrescriptions(int id){
+        String sql = "DELETE FROM Prescription WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void deleteVS(int id){
+        String sql = "DELETE FROM VisitSummary WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void deleteVitals(int id){
+        String sql = "DELETE FROM Vitals WHERE patientID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
             pstmt.executeUpdate();
 
         } catch (SQLException e) {

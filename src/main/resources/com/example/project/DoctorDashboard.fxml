@@ -15,11 +15,16 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project.LoggedStaffController">
    <top>
-      <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-spacing: 400; -fx-alignment: center; -fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
+      <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-spacing: 100; -fx-alignment: center; -fx-background-color: #C0C0C0;" BorderPane.alignment="CENTER">
          <items>
             <TextFlow prefHeight="42.0" prefWidth="211.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
                <children>
-                  <Label fx:id="nameLabel" alignment="CENTER" prefHeight="40.0" prefWidth="78.0" text="Doctor" textAlignment="CENTER" translateY="1.0" wrapText="true" />
+                  <Label fx:id="nameLabel" alignment="CENTER" prefHeight="40.0" prefWidth="111.0" text="Doctor" textAlignment="CENTER" translateY="1.0" wrapText="true" />
+               </children>
+            </TextFlow>
+            <TextFlow prefHeight="42.0" prefWidth="211.0" style="-fx-border-color: black; -fx-text-alignment: center;" textAlignment="CENTER">
+               <children>
+                  <Label fx:id="nurseName" alignment="CENTER" prefHeight="40.0" prefWidth="130.0" text="Nurse" textAlignment="CENTER" translateY="1.0" wrapText="true" />
                </children>
             </TextFlow>
          </items>
@@ -95,7 +100,10 @@
                         </HBox>
                      </bottom>
                      <center>
-                        <TableView fx:id="messageTable" fixedCellSize="25.0" prefHeight="200.0" prefWidth="200.0" style="-fx-table-cell-border-color: transparent; -fx-background-color: white;" BorderPane.alignment="CENTER">
+                        <TableView fx:id="messageTable" fixedCellSize="25.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-control-inner-background: white; -fx-table-cell-border-color: transparent;" BorderPane.alignment="CENTER">
+                           <placeholder>
+                              <Label text="" />
+                           </placeholder>
                           <columns>
                             <TableColumn fx:id="patMessageCol" prefWidth="75.0" text="Patient" />
                             <TableColumn fx:id="docMessageCol" prefWidth="75.0" text="Doctor" />

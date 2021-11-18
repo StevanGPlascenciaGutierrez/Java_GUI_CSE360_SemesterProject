@@ -5,7 +5,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -49,7 +48,6 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextArea fx:id="patDocDesc" editable="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-radius: 20;" GridPane.columnIndex="2" />
                         <Label alignment="CENTER" prefHeight="56.0" prefWidth="119.0" style="-fx-border-color: black;" text="Doctor" textAlignment="CENTER" wrapText="true" />
                         <DatePicker fx:id="patAppDate" onAction="#onAppComboChange" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label alignment="CENTER" prefHeight="56.0" prefWidth="119.0" style="-fx-border-color: black;" text="Date" textAlignment="CENTER" wrapText="true" GridPane.rowIndex="1" />
