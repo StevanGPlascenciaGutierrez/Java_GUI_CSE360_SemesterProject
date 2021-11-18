@@ -563,7 +563,6 @@ public class LoggedStaffController {
             }
 
             newVisit.insert(newVisit, Integer.parseInt(visitorID.getText()));
-            changeScene(submitVisit, "DoctorDashboard.fxml", this.getID());
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Project.class.getResource("DoctorDashboard.fxml"));
             root = loader.load();
@@ -574,6 +573,7 @@ public class LoggedStaffController {
             DoctorDashboard doc = new DoctorDashboard();
             doc = doc.select(this.getID());
             cont.setDash(doc);
+            cont.setName(this.getID());
 
             window = (Stage) submitVisit.getScene().getWindow();
             scene = new Scene(root, submitVisit.getScene().getWidth(), submitVisit.getScene().getHeight());
