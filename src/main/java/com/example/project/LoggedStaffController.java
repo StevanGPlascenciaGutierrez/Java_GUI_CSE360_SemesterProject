@@ -95,6 +95,33 @@ public class LoggedStaffController {
     @FXML
     private ComboBox<Patient> patientMessageCombo;
 
+    @FXML
+    private TableView<Prescription> prescriptionTable;
+
+    @FXML
+    private TableColumn<Prescription, String> preTableName, preTableFrom, preTableTo, preTableDosage, preTableDesc;
+
+    @FXML
+    private TextField newPreName, newPreDosage, newPreDesc;
+
+    @FXML
+    private TableView<Allergy> allergyTable;
+
+    @FXML
+    private TableColumn<Allergy, String> allergyNameCol, allergyDescCol;
+
+    @FXML
+    private TextField newAllergyName, newAllergyDesc;
+
+    @FXML
+    private Button newAllergy;
+
+    @FXML
+    private TableView<HealthIssues> issueTable;
+
+    @FXML
+    private TableColumn<HealthIssues, String> issueNameCol, issueDescCol, issueDateCol;
+
     private Parent root;
     private Scene scene;
     private Stage window;
@@ -144,7 +171,22 @@ public class LoggedStaffController {
             patImmune.setItems(immune);
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
+        try {
+            setHealthHistory(id);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            Prescription pre = new Prescription();
+            ArrayList<Prescription> preList = pre.select(id);
+            setPrescriptions(preList);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
     }
@@ -603,5 +645,47 @@ public class LoggedStaffController {
 
     }
 
+    protected void setHealthHistory (int patientID) {
+        HealthHistory health = new HealthHistory().select(patientID);
+        ObservableList<Allergy> allergyList = FXCollections.observableArrayList(health.getAllergies());
+        ObservableList<HealthIssues> issuesList = FXCollections.observableArrayList(health.getIssues());
+        try  {
+            allergyNameCol.setCellValueFactory(new PropertyValueFactory<Allergy, String>("type"));
+            allergyDescCol.setCellValueFactory(new PropertyValueFactory<Allergy, String>("description"));
+            allergyTable.setItems(allergyList);
+        }
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try  {
+            issueNameCol.setCellValueFactory(new PropertyValueFactory<HealthIssues, String>("name"));
+            issueDateCol.setCellValueFactory(new PropertyValueFactory<HealthIssues, String>("date"));
+            issueDescCol.setCellValueFactory(new PropertyValueFactory<HealthIssues, String>("description"));
+            issueTable.setItems(issuesList);
+        }
+        catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    @FXML
+    protected void setPrescriptions(ArrayList<Prescription> preList) throws Exception {
+
+        ObservableList<Prescription> temp = FXCollections.observableArrayList(preList);
+
+        try {
+            preTableName.setCellValueFactory(new PropertyValueFactory<>("name"));
+            preTableFrom.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+            preTableTo.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+            preTableDosage.setCellValueFactory(new PropertyValueFactory<>("dosage"));
+            preTableDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
+            prescriptionTable.setItems(temp);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 }
