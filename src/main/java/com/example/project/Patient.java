@@ -1,5 +1,7 @@
 package com.example.project;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -148,68 +150,7 @@ public class Patient {
         }
     }
 
-    public ArrayList<Patient> select(int id) {
-        String sql = "SELECT * FROM Patient WHERE currentDoctor = ?";
-        ArrayList<Patient> patList = new ArrayList<Patient>();
 
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
-            while(rs.next()) {
-                Patient pat = new Patient();
-                pat.setID(rs.getInt("patientID"));
-                pat.setName(rs.getString("name"));
-                Hyperlink hyper = new Hyperlink();
-                hyper.setText("more details");
-
-
-                hyper.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        FXMLLoader loader = new FXMLLoader();
-                        loader.setLocation(Project.class.getResource("DoctorView.fxml"));
-                        Parent root = null;
-                        try {
-                            root = loader.load();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        LoggedStaffController cont = loader.getController();
-
-                        cont.setID(pat.getID());
-                        Stage box = new Stage();
-                        Scene scene = new Scene(root);
-
-                        PatientDashboard dash = new PatientDashboard();
-                        dash.select(pat.getID());
-                        try {
-                            cont.setDoctorView(dash, pat.getID());
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-
-                        box.initModality(Modality.APPLICATION_MODAL);
-                        box.setResizable(false);
-                        box.setScene(scene);
-                        box.showAndWait();
-
-                    }
-                });
-
-                pat.setLink(hyper);
-
-
-                patList.add(pat);
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-         return patList;
-    }
 
     public Patient getPatientObject(int id) throws SQLException {
         String sql = "SELECT * FROM Doctor WHERE patientID = ?";
@@ -396,14 +337,21 @@ public class Patient {
         try {
 
             ArrayList<Integer> arr = getChatNums(id);
-            for (int chatNum : arr) {
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                pstmt.setInt(1, chatNum);
-                pstmt.executeUpdate();
 
-                PreparedStatement stmt = conn.prepareStatement(sqlTwo);
-                stmt.setInt(1, chatNum);
-                stmt.executeUpdate();
+            try {
+                for (int chatNum : arr) {
+                    PreparedStatement pstmt = conn.prepareStatement(sql);
+                    pstmt.setInt(1, chatNum);
+                    pstmt.executeUpdate();
+
+                    PreparedStatement stmt = conn.prepareStatement(sqlTwo);
+                    stmt.setInt(1, chatNum);
+                    stmt.executeUpdate();
+
+                }
+            }
+
+            catch (NullPointerException e) {
 
             }
 

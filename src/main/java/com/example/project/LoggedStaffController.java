@@ -4,6 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -268,7 +271,7 @@ public class LoggedStaffController {
 
         ObservableList<Appointment> appoint = FXCollections.observableArrayList(app);
 
-        ArrayList<Patient> patList = new Patient().select(this.getID());
+        ArrayList<Patient> patList = select(this.getID());
 
         try  {
             patNameCol.setCellValueFactory(new PropertyValueFactory<Appointment, String>("name"));
@@ -448,6 +451,71 @@ public class LoggedStaffController {
         }
     }
 
+    public ArrayList<Patient> select(int id) {
+        String sql = "SELECT * FROM Patient WHERE currentDoctor = ?";
+        ArrayList<Patient> patList = new ArrayList<Patient>();
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()) {
+                Patient pat = new Patient();
+                pat.setID(rs.getInt("patientID"));
+                pat.setName(rs.getString("name"));
+                Hyperlink hyper = new Hyperlink();
+                hyper.setText("more details");
+
+
+                hyper.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(Project.class.getResource("DoctorView.fxml"));
+                        Parent root = null;
+                        try {
+                            root = loader.load();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        LoggedStaffController cont = loader.getController();
+
+                        cont.setID(pat.getID());
+                        Stage box = new Stage();
+                        Scene scene = new Scene(root);
+
+                        PatientDashboard dash = new PatientDashboard();
+                        dash.select(pat.getID());
+                        try {
+                            cont.setDoctorView(dash, pat.getID());
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+
+                        box.initModality(Modality.APPLICATION_MODAL);
+                        box.setResizable(false);
+                        box.setScene(scene);
+                        box.showAndWait();
+
+                    }
+                });
+
+
+                pat.setLink(hyper);
+
+
+                patList.add(pat);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return patList;
+    }
+
+
     @FXML
     protected void onBackPatSearchClick() throws Exception {
         Stage box = (Stage) backPatSearch.getScene().getWindow();
@@ -515,7 +583,7 @@ public class LoggedStaffController {
     }
 
     protected void populateVisit(int id) {
-        ArrayList<Patient> patList = new Patient().select(id);
+        ArrayList<Patient> patList = select(id);
         ArrayList<String> patName = new ArrayList<>();
 
         for (Patient pat : patList) {
@@ -633,7 +701,7 @@ public class LoggedStaffController {
         cont.setID(this.getID());
 
         Patient pat = new Patient();
-        ArrayList<Patient> patList = pat.select(this.getID());
+        ArrayList<Patient> patList = select(this.getID());
         ObservableList<Patient> patTab = FXCollections.observableArrayList(patList);
 
         cont.setSearch(patTab);
